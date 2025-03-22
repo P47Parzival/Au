@@ -1,1 +1,32 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-primary text-gray-100;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-primary-light bg-opacity-30 backdrop-blur-lg border border-gray-700/30 rounded-xl shadow-xl;
+  }
+  
+  .neon-button {
+    @apply px-6 py-3 bg-accent text-primary font-semibold rounded-lg 
+           transition-all duration-300 hover:bg-accent-hover 
+           hover:shadow-[0_0_20px_rgba(0,255,148,0.5)] 
+           active:transform active:scale-95;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg 
+           transition-colors duration-200 
+           hover:bg-primary-light/50;
+  }
+
+  .sidebar-link.active {
+    @apply bg-primary-light text-accent;
+  }
+}
