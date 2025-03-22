@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Line } from 'react-chartjs-2';
-
-const ANGEL_API_KEY = ZEiLPDbG;
-const ANGEL_SECRET_KEY = 170a3703-2dd5-4ffa-893a-fa265b37b524;
 
 const marketData = {
   labels: ['9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
@@ -80,158 +76,6 @@ const marketNews = [
     impact: "Neutral",
   },
 ];
-
-const STOCK_SYMBOLS = [
-  { symbol: 'RELIANCE', token: '2885' },
-  { symbol: 'TCS', token: '11536' },
-  { symbol: 'HDFCBANK', token: '341' },
-  { symbol: 'INFY', token: '1594' },
-  { symbol: 'SBIN', token: '3045' },
-  { symbol: 'ICICIBANK', token: '1270' },
-  { symbol: 'BHARTIARTL', token: '10604' },
-  { symbol: 'HINDUNILVR', token: '1394' }
-];
-
-const MarketScanner = () => {
-  interface StockData {
-    symbol: string;
-    price?: number;
-    change?: number;
-    high?: number;
-    low?: number;
-    volume?: number;
-  }
-  
-  interface CandleData {
-    high: number;
-    low: number;
-    close: number;
-    volume: number;
-  }
-
-  const [stocksData, setStocksData] = useState<StockData[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [timeframe, setTimeframe] = useState('1D');
-
-  const fetchStocksData = async () => {
-    setLoading(true);
-    try {
-      const promises = STOCK_SYMBOLS.map(async (stock) => {
-        const response = await axios.get('https://apiconnect.angelbroking.com/rest/secure/angelbroking/historical/v1/getCandleData', {
-          headers: {
-            'X-PrivateKey': ANGEL_SECRET_KEY,
-            'Accept': 'application/json',
-            'X-SourceID': 'WEB',
-            'X-ClientLocalIP': '127.0.0.1',
-            'X-ClientPublicIP': '127.0.0.1',
-            'X-MACAddress': '00:00:00:00:00:00',
-            'X-UserType': 'USER',
-            'Authorization': `Bearer ${ANGEL_API_KEY}`,
-          },
-          params: {
-            exchange: 'NSE',
-            symboltoken: stock.token,
-            interval: timeframe === '1D' ? 'FIFTEEN_MINUTE' : 'ONE_DAY',
-            fromdate: new Date(Date.now() - (timeframe === '1D' ? 1 : 30) * 24 * 60 * 60 * 1000).toISOString(),
-            todate: new Date().toISOString()
-          }
-        });
-
-        const data = response.data.data || [];
-        if (data.length > 0) {
-          const lastCandle = data[data.length - 1] as CandleData;
-          const prevCandle = data[data.length - 2] as CandleData;
-          const change = ((lastCandle.close - prevCandle.close) / prevCandle.close) * 100;
-
-          return {
-            ...stock,
-            price: lastCandle.close,
-            change,
-            high: Math.max(...data.map((d: CandleData) => d.high)),
-            low: Math.min(...data.map((d: CandleData) => d.low)),
-            volume: data.reduce((sum: number, d: CandleData) => sum + d.volume, 0)
-          };
-        }
-        return stock;
-      });
-
-      const results = await Promise.all(promises);
-      setStocksData(results);
-    } catch (error) {
-      console.error('Error fetching stocks data:', error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchStocksData();
-    const interval = setInterval(fetchStocksData, 60000); // Refresh every minute
-    return () => clearInterval(interval);
-  }, [timeframe]);
-
-  return (
-    <div className="glass-card p-6 lg:col-span-3">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Market Scanner</h2>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setTimeframe('1D')}
-            className={`px-4 py-2 rounded-lg ${
-              timeframe === '1D' ? 'bg-accent text-primary' : 'bg-primary-light'
-            }`}
-          >
-            1D
-          </button>
-          <button
-            onClick={() => setTimeframe('30D')}
-            className={`px-4 py-2 rounded-lg ${
-              timeframe === '30D' ? 'bg-accent text-primary' : 'bg-primary-light'
-            }`}
-          >
-            30D
-          </button>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-accent"></div>
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left border-b border-gray-700">
-                <th className="pb-4">Symbol</th>
-                <th className="pb-4 text-right">Price</th>
-                <th className="pb-4 text-right">Change</th>
-                <th className="pb-4 text-right">High</th>
-                <th className="pb-4 text-right">Low</th>
-                <th className="pb-4 text-right">Volume</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stocksData.map((stock) => (
-                <tr key={stock.symbol} className="border-b border-gray-700/50">
-                  <td className="py-4 font-semibold">{stock.symbol}</td>
-                  <td className="py-4 text-right">₹{stock.price?.toFixed(2) || '-'}</td>
-                  <td className={`py-4 text-right ${
-                    (stock.change ?? 0) > 0 ? 'text-green-400' : 'text-red-400'
-                  }`}>
-                    {stock.change ? `${stock.change > 0 ? '+' : ''}${stock.change.toFixed(2)}%` : '-'}
-                  </td>
-                  <td className="py-4 text-right">₹{stock.high?.toFixed(2) || '-'}</td>
-                  <td className="py-4 text-right">₹{stock.low?.toFixed(2) || '-'}</td>
-                  <td className="py-4 text-right">{stock.volume?.toLocaleString() || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export function MarketTrends() {
   return (
@@ -313,10 +157,7 @@ export function MarketTrends() {
             ))}
           </div>
         </div>
-
-        <MarketScanner />
       </div>
-
     </motion.div>
   );
 }
