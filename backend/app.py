@@ -13,7 +13,9 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
+
+# Set secret key with a default value if not in environment
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-super-secret-key-12345')
 
 # Enable CORS
 CORS(app, resources={r"/*": {"origins": "*"}})

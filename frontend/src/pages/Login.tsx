@@ -17,28 +17,50 @@ export function Login() {
     setLoading(true);
 
     try {
+      const requestBody = {
+        client_id: clientId,
+        password: pin.toString(),
+        totp: totp.toString(),
+      };
+      
+      console.log('Sending login request with:', requestBody);
+
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          client_id: clientId,
-          password: pin,
-          totp,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+        console.log('Received response:', data);
+      } catch (e) {
+        console.error('Failed to parse response:', e);
+        throw new Error('Server returned invalid response');
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || data.error || 'Login failed');
+      }
+
+      if (!data.token) {
+        console.error('No token in response:', data);
+        throw new Error('No authentication token received');
+      }
+
+      if (typeof data.token !== 'string') {
+        console.error('Token is not a string:', data.token);
+        throw new Error('Invalid token received from server');
       }
 
       login(data.token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Login error:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred during login');
     } finally {
       setLoading(false);
     }

@@ -11,21 +11,32 @@ class AngelOneService:
     def __init__(self):
         self.trading_api_key = "ihOGtndl"
         self.publisher_api_key = "xjz7Ko9s"
-        self.client_id = "S55255319"
-        self.pin = "1234"  # Be careful with hardcoding pins in production
-        self.totp_key = "IJCJYIE45CZHYH4F3GMUQAP2HE"
+        self.client_id = None
+        self.pin = None
+        self.totp_key = None
         self.trading_api = None
         self.market_api = None
         self.refresh_token = None
         self.access_token = None
 
+    def set_credentials(self, client_id, pin, totp_key):
+        """Set credentials for the service"""
+        self.client_id = client_id
+        self.pin = pin
+        self.totp_key = totp_key
+
     def connect(self):
         """Connect to Angel One API"""
         try:
+            if not all([self.client_id, self.pin, self.totp_key]):
+                logger.error("Credentials not set")
+                return False
+
             # Connect with trading API
             self.trading_api = SmartConnect(api_key=self.trading_api_key)
             totp = pyotp.TOTP(self.totp_key).now()
             
+            logger.info(f"Attempting to connect with client_id: {self.client_id}")
             data = self.trading_api.generateSession(
                 self.client_id,
                 self.pin,
@@ -35,6 +46,7 @@ class AngelOneService:
             if data['status']:
                 self.refresh_token = data['data']['refreshToken']
                 self.access_token = data['data']['jwtToken']
+                logger.info("Successfully connected to Trading API")
                 
                 # Connect with market data API
                 self.market_api = SmartConnect(api_key=self.publisher_api_key)
