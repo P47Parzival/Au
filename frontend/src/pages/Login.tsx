@@ -105,7 +105,7 @@ export function Login() {
             type="submit"
             disabled={loading}
             className={`w-full py-3 px-4 bg-accent text-primary rounded-lg font-medium ${
-              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent/90'
+              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent-hover'
             }`}
           >
             {loading ? 'Logging in...' : 'Login'}

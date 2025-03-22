@@ -24,10 +24,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-accent text-primary'
-                    : 'hover:bg-primary-light'
+                className={`sidebar-link ${
+                  location.pathname === item.path ? 'active' : ''
                 }`}
               >
                 <span>{item.icon}</span>

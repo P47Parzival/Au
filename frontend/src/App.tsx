@@ -22,6 +22,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 // App Routes component
 function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -45,21 +47,30 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/market" element={
-        <ProtectedRoute>
-          <Layout>
-            <MarketTrends />
-          </Layout>
-        </ProtectedRoute>
-      } />
-      <Route path="/settings" element={
-        <ProtectedRoute>
-          <Layout>
-            <Settings />
-          </Layout>
-        </ProtectedRoute>
-      } />
-      <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Route 
+        path="/market" 
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MarketTrends />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/settings" 
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Settings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/" 
+        element={isAuthenticated ? <Navigate to="/dashboard" /> : <Home />} 
+      />
     </Routes>
   );
 }

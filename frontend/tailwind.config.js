@@ -8,8 +8,12 @@ export default {
           DEFAULT: 'var(--color-primary)',
           light: 'var(--color-primary-light)',
           dark: 'var(--color-primary-dark)',
+          'light-hover': 'var(--color-primary-light-hover)',
         },
-        accent: 'var(--color-accent)',
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          hover: 'var(--color-accent-hover)',
+        },
         secondary: {
           DEFAULT: '#7B3FE4',
           light: '#9B6AE8',

@@ -22,7 +22,7 @@ export function Home() {
         </p>
         <button
           onClick={() => navigate('/login')}
-          className="px-8 py-3 bg-accent text-primary rounded-lg font-medium hover:bg-accent/90 transition-colors"
+          className="px-8 py-3 bg-accent text-primary rounded-lg font-medium hover:bg-accent-hover transition-colors"
         >
           Get Started
         </button>

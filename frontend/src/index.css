@@ -7,6 +7,8 @@
   --color-primary-light: #1e293b;
   --color-primary-dark: #0a1120;
   --color-accent: #00FF94;
+  --color-accent-hover: #00CC77;
+  --color-primary-light-hover: rgba(30, 41, 59, 0.5);
 }
 
 body {
@@ -36,15 +38,18 @@ body {
   
   .neon-button {
     @apply px-6 py-3 bg-accent text-primary font-semibold rounded-lg 
-           transition-all duration-300 hover:bg-accent-hover 
+           transition-all duration-300 hover:bg-accent-hover
            hover:shadow-[0_0_20px_rgba(0,255,148,0.5)] 
            active:transform active:scale-95;
   }
 
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-lg 
-           transition-colors duration-200 
-           hover:bg-primary-light/50;
+           transition-colors duration-200;
+  }
+
+  .sidebar-link:hover {
+    background-color: var(--color-primary-light-hover);
   }
 
   .sidebar-link.active {
