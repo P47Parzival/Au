@@ -2,13 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Update root variables for dark mode */
 :root {
   --color-primary: #0f172a;
   --color-primary-light: #1e293b;
-  --color-primary-dark: #0a1120;
+  --color-primary-dark: #0f172a;
   --color-accent: #00FF94;
   --color-accent-hover: #00CC77;
-  --color-primary-light-hover: rgba(30, 41, 59, 0.5);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(51, 65, 85, 0.5);
+  --glass-blur: 12px;
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --positive: #4ade80;
+  --negative: #f43f5e;
+  --primary-light-hover: rgba(30, 41, 59, 0.7);
+  --chart-text: #ffffff;
+  --chart-grid: rgba(255, 255, 255, 0.1);
+}
+
+/* Update light mode variables */
+:root.light-mode {
+  --color-primary: #ffffff;
+  --color-primary-light: #f8fafc;
+  --color-primary-dark: #f1f5f9;
+  --color-accent: #0284c7;
+  --color-accent-hover: #0369a1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: rgba(226, 232, 240, 0.8);
+  --glass-blur: 8px;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --positive: #16a34a;
+  --negative: #dc2626;
+  --primary-light-hover: rgba(241, 245, 249, 0.7);
+  --chart-text: #1e293b;
+  --chart-grid: rgba(30, 41, 59, 0.1);
 }
 
 body {
@@ -19,10 +48,37 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Add text color override for light mode */
+:root.light-mode body {
+  @apply text-gray-900;
+}
+
+/* Update card styles */
 .glass-card {
-  @apply bg-primary-light bg-opacity-50 backdrop-blur-lg rounded-xl border border-gray-700/50;
+  background: rgba(var(--color-primary-light), 0.7);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-accent);
+}
+
+/* Add glass card override for light mode */
+:root.light-mode .glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+:root.light-mode .glass-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 @layer base {
@@ -33,7 +89,7 @@ body {
 
 @layer components {
   .glass-card {
-    @apply bg-primary-light bg-opacity-30 backdrop-blur-lg border border-gray-700/30 rounded-xl shadow-xl;
+    @apply bg-primary-light bg-opacity-30 backdrop-blur-lg border border-gray-700/30 rounded-xl shadow-xl p-6;
   }
   
   .neon-button {
@@ -45,14 +101,345 @@ body {
 
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-lg 
-           transition-colors duration-200;
+           transition-all duration-200 text-adaptive;
   }
 
-  .sidebar-link:hover {
-    background-color: var(--color-primary-light-hover);
+  :root.light-mode .sidebar-link {
+    color: var(--text-primary);
   }
 
-  .sidebar-link.active {
-    @apply bg-primary-light text-accent;
+  :root.light-mode .sidebar-link:hover {
+    background-color: var(--primary-light-hover);
+    color: var(--color-accent);
   }
+
+  :root.light-mode .sidebar-link.active {
+    background-color: var(--color-accent);
+    color: white;
+  }
+  
+  .stats-card {
+    background: var(--color-primary-light);
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+  }
+  
+  .responsive-grid {
+    @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+}
+
+/* Form elements */
+input, select, textarea {
+  background-color: var(--color-primary-light);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+/* Dark/Light mode specific text */
+/* Update text classes */
+.text-adaptive {
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+:root.light-mode .text-adaptive {
+  color: var(--text-primary);
+}
+
+.text-adaptive-secondary {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+:root.light-mode .text-adaptive-secondary {
+  color: var(--text-secondary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-hover);
+}
+
+/* Chart customization */
+/* Update chart container */
+.chart-container {
+  background: var(--color-primary-light);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.chart-container .chart-title {
+  color: var(--chart-text);
+}
+
+/* Dark mode specific chart text colors */
+.portfolio-overview .chart-container canvas,
+.asset-allocation .chart-container canvas, 
+.distribution .chart-container canvas {
+  color: white !important;
+}
+
+/* Light mode chart colors */
+:root.light-mode .portfolio-overview .chart-container canvas,
+:root.light-mode .asset-allocation .chart-container canvas,
+:root.light-mode .distribution .chart-container canvas {
+  color: var(--text-primary) !important;
+}
+
+/* Add text color override for light mode */
+:root.light-mode .chart-container {
+  background: rgba(248, 250, 252, 0.8);
+}
+
+/* Table styles */
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.custom-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.custom-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.custom-table tr:hover {
+  background-color: var(--primary-light-hover);
+}
+
+/* Stats card */
+.stats-card {
+  background: var(--color-primary-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.stats-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+:root.light-mode .stats-label {
+  color: var(--text-secondary);
+}
+
+.stats-value {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: block;
+}
+
+:root.light-mode .stats-value {
+  color: var(--text-primary);
+}
+
+/* Responsive containers */
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Additional UI enhancements */
+.page-title {
+  @apply text-3xl font-bold mb-6 text-adaptive;
+  position: relative;
+  display: inline-block;
+}
+
+.page-title:after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--color-accent);
+  border-radius: 3px;
+}
+
+/* Update headings */
+.subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+/* Add text color override for light mode */
+:root.light-mode .subtitle {
+  color: var(--text-primary);
+}
+
+.card-grid {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.dashboard-layout {
+  @apply p-6 w-full;
+  max-width: calc(100vw - 256px);
+  margin-left: 256px;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Value colors */
+.value-positive {
+  color: var(--positive);
+  font-weight: 600;
+}
+
+.value-negative {
+  color: var(--negative);
+  font-weight: 600;
+}
+
+/* Update background colors for light mode */
+:root.light-mode .bg-primary-light {
+  background-color: #f1f5f9;
+}
+
+:root.light-mode .bg-primary-light:hover {
+  background-color: #e2e8f0;
+}
+
+/* Update form elements for light mode */
+:root.light-mode input,
+:root.light-mode select {
+  background-color: white;
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+:root.light-mode input:focus,
+:root.light-mode select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.1);
+}
+
+/* Update labels and text for better visibility */
+:root.light-mode label,
+:root.light-mode .stats-label {
+  color: var(--text-secondary);
+}
+
+:root.light-mode .stats-value {
+  color: var(--text-primary);
+}
+
+/* Update calculator text colors */
+:root.light-mode .calculator-text {
+  color: var(--text-primary);
+}
+
+:root.light-mode .calculator-subtext {
+  color: var(--text-secondary);
+}
+
+/* Chart title styles */
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+:root.light-mode .chart-title {
+  color: var(--text-primary);
+}
+
+/* Add these specific styles for chart titles and text */
+.chart-title, 
+.portfolio-chart-title,
+.asset-chart-title,
+.distribution-chart-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+/* Portfolio overview specific styles */
+.portfolio-overview {
+  color: var(--chart-text);
+}
+
+.portfolio-overview .chart-container {
+  background: var(--color-primary-light);
+}
+
+/* Asset allocation specific styles */
+.asset-allocation {
+  color: var(--chart-text);
+}
+
+.asset-allocation .chart-container {
+  background: var(--color-primary-light);
+}
+
+/* Distribution specific styles */
+.distribution {
+  color: var(--chart-text);
+}
+
+.distribution .chart-container {
+  background: var(--color-primary-light);
 }

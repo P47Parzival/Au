@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 import { stocksApi } from '../services/api';
+import { TrendingUp, ArrowUpRight, ArrowDownRight, PieChart, RefreshCw } from 'lucide-react';
 
 interface PortfolioData {
   total_value: number;
@@ -77,10 +78,18 @@ export function Portfolio() {
       legend: {
         position: 'top' as const,
         labels: {
-          color: '#fff',
-        },
+          color: 'var(--text-primary)',
+          font: {
+            weight: 500
+          }
+        }
       },
       tooltip: {
+        backgroundColor: 'var(--color-primary-light)',
+        titleColor: 'var(--text-primary)',
+        bodyColor: 'var(--text-primary)',
+        borderColor: 'var(--border-color)',
+        borderWidth: 1,
         callbacks: {
           label: (context: any) => {
             const value = context.raw;
@@ -116,42 +125,52 @@ export function Portfolio() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="flex-1 p-6"
+      className="fade-in"
     >
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Portfolio</h1>
-        <div className="text-right">
-          <p className="text-gray-400">Total Value</p>
-          <p className="text-2xl font-bold text-accent">₹{portfolioData?.total_value.toLocaleString() || '0'}</p>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="page-title">Portfolio</h1>
+        <div className="glass-card p-3 flex items-center">
+          <span className="text-adaptive-secondary mr-2">Total Value:</span>
+          <span className="text-xl font-bold text-accent">₹{portfolioData?.total_value.toLocaleString() || '0'}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="glass-card p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Holdings</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="glass-card lg:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="subtitle mb-0">Holdings</h2>
+            <button className="flex items-center text-adaptive-secondary hover:text-accent transition-colors" onClick={fetchPortfolioData}>
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </button>
+          </div>
+          
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="custom-table w-full">
               <thead>
-                <tr className="text-left border-b border-gray-700">
-                  <th className="pb-4">Symbol</th>
-                  <th className="pb-4">Exchange</th>
-                  <th className="pb-4 text-right">Qty</th>
-                  <th className="pb-4 text-right">Avg. Price</th>
-                  <th className="pb-4 text-right">LTP</th>
-                  <th className="pb-4 text-right">Current Value</th>
-                  <th className="pb-4 text-right">P&L</th>
+                <tr className="border-b border-border-color">
+                  <th className="text-adaptive-secondary font-medium px-4 py-3">Symbol</th>
+                  <th className="text-adaptive-secondary font-medium px-4 py-3">Exchange</th>
+                  <th className="text-right text-adaptive-secondary font-medium px-4 py-3">Qty</th>
+                  <th className="text-right text-adaptive-secondary font-medium px-4 py-3">Avg. Price</th>
+                  <th className="text-right text-adaptive-secondary font-medium px-4 py-3">LTP</th>
+                  <th className="text-right text-adaptive-secondary font-medium px-4 py-3">Current Value</th>
+                  <th className="text-right text-adaptive-secondary font-medium px-4 py-3">P&L</th>
                 </tr>
               </thead>
               <tbody>
                 {portfolioData?.holdings?.map((holding) => (
-                  <tr key={holding.tradingsymbol} className="border-b border-gray-700/50">
-                    <td className="py-4 font-semibold">{holding.tradingsymbol}</td>
-                    <td className="py-4 text-gray-300">{holding.exchange}</td>
-                    <td className="py-4 text-right">{holding.quantity}</td>
-                    <td className="py-4 text-right">₹{holding.averageprice.toLocaleString()}</td>
-                    <td className="py-4 text-right">₹{holding.ltp.toLocaleString()}</td>
-                    <td className="py-4 text-right">₹{(holding.ltp * holding.quantity).toLocaleString()}</td>
-                    <td className={`py-4 text-right ${holding.profitandloss >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <tr key={holding.tradingsymbol} 
+                      className="border-b border-border-color hover:bg-primary-light/50 transition-colors">
+                    <td className="px-4 py-3 text-adaptive font-medium">{holding.tradingsymbol}</td>
+                    <td className="px-4 py-3 text-adaptive-secondary">{holding.exchange}</td>
+                    <td className="px-4 py-3 text-right">{holding.quantity}</td>
+                    <td className="px-4 py-3 text-right">₹{holding.averageprice.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-right">₹{holding.ltp.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-right">₹{(holding.ltp * holding.quantity).toLocaleString()}</td>
+                    <td className={`px-4 py-3 text-right ${
+                      holding.profitandloss >= 0 ? 'value-positive' : 'value-negative'
+                    }`}>
                       {holding.profitandloss >= 0 ? '+' : ''}₹{holding.profitandloss.toLocaleString()}
                       <span className="text-sm ml-1">
                         ({holding.pnlpercentage >= 0 ? '+' : ''}{holding.pnlpercentage.toFixed(2)}%)
@@ -164,34 +183,54 @@ export function Portfolio() {
           </div>
         </div>
 
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-semibold mb-4">Distribution</h2>
-          <Pie data={pieData} options={pieOptions} />
+        <div className="glass-card distribution">
+          <div className="flex items-center mb-4">
+            <PieChart className="w-5 h-5 text-accent mr-2" />
+            <h2 className="chart-title">Distribution</h2>
+          </div>
+          <div className="chart-container">
+            <Pie data={pieData} options={pieOptions} />
+          </div>
         </div>
 
-        <div className="glass-card p-6 lg:col-span-3">
-          <h2 className="text-xl font-semibold mb-4">Performance</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Today's P&L</p>
-              <p className={`text-2xl font-bold ${(portfolioData?.metrics.daily_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {(portfolioData?.metrics.daily_pl || 0) >= 0 ? '+' : ''}₹{Math.abs(portfolioData?.metrics.daily_pl || 0).toLocaleString()}
-                <span className="text-sm ml-1">
-                  ({(portfolioData?.metrics.daily_change || 0).toFixed(2)}%)
+        <div className="glass-card lg:col-span-3">
+          <h2 className="subtitle text-adaptive">Performance Metrics</h2>
+          <div className="responsive-grid">
+            <div className="stats-card">
+              <span className="stats-label">Today's P&L</span>
+              <div className="flex items-center">
+                <span className={`stats-value ${(portfolioData?.metrics.daily_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(portfolioData?.metrics.daily_pl || 0) >= 0 ? '+' : ''}₹{Math.abs(portfolioData?.metrics.daily_pl || 0).toLocaleString()}
                 </span>
-              </p>
+                {(portfolioData?.metrics.daily_change || 0) >= 0 ? (
+                  <ArrowUpRight className="w-5 h-5 text-green-400 ml-2" />
+                ) : (
+                  <ArrowDownRight className="w-5 h-5 text-red-400 ml-2" />
+                )}
+              </div>
+              <span className="text-adaptive-secondary">
+                Daily change: {(portfolioData?.metrics.daily_change || 0).toFixed(2)}%
+              </span>
             </div>
-            <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Total Investment</p>
-              <p className="text-2xl font-bold text-accent">
+            
+            <div className="stats-card">
+              <span className="stats-label">Total Investment</span>
+              <span className="stats-value text-accent">
                 ₹{(portfolioData?.metrics.total_investments || 0).toLocaleString()}
-              </p>
+              </span>
+              <span className="text-adaptive-secondary">
+                Initial capital
+              </span>
             </div>
-            <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Total Value</p>
-              <p className="text-2xl font-bold text-accent">
+            
+            <div className="stats-card">
+              <span className="stats-label">Total Value</span>
+              <span className="stats-value text-accent">
                 ₹{(portfolioData?.total_value || 0).toLocaleString()}
-              </p>
+              </span>
+              <span className="text-adaptive-secondary">
+                Current portfolio value
+              </span>
             </div>
           </div>
         </div>
