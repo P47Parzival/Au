@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Dashboard } from './pages/Dashboard';
 import { Portfolio } from './pages/Portfolio';
+import { MarketTrends } from './pages/MarketTrends';
+import { Settings } from './pages/Settings';
 import { Layout } from './components/Layout';
 
 function App() {
@@ -18,6 +20,16 @@ function App() {
         <Route path="/portfolio" element={
           <Layout>
             <Portfolio />
+          </Layout>
+        } />
+        <Route path="/market" element={
+          <Layout>
+            <MarketTrends />
+          </Layout>
+        } />
+        <Route path="/settings" element={
+          <Layout>
+            <Settings />
           </Layout>
         } />
       </Routes>
