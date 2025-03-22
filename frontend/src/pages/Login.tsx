@@ -1,79 +1,95 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Brain } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [clientId, setClientId] = useState('S55255319'); // Default from AngelLogin.py
+  const [pin, setPin] = useState('1234'); // Default from AngelLogin.py
+  const [totp, setTotp] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    setError('');
+    setLoading(true);
+
+    try {
+      await login(clientId, pin, totp);
+      navigate('/dashboard');
+    } catch (err) {
+      setError('Invalid credentials or server error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-primary bg-gradient-radial from-primary-light to-primary flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="glass-card w-full max-w-md p-8"
-      >
-        <div className="flex items-center gap-2 justify-center mb-8">
-          <Brain className="w-8 h-8 text-accent" />
-          <span className="text-xl font-bold">FinanceAI</span>
-        </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex items-center justify-center bg-primary"
+    >
+      <div className="glass-card p-8 w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-6 text-center">Login with Angel One</h1>
+        
+        {error && (
+          <div className="bg-red-500/20 border border-red-500 text-red-100 p-3 rounded-lg mb-4">
+            {error}
+          </div>
+        )}
 
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-gray-300 mb-2">Client ID</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
-              className="w-full bg-primary-light bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-accent"
+              type="text"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
+              placeholder="Enter your Angel One Client ID"
               required
             />
           </div>
 
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div>
+            <label className="block text-gray-300 mb-2">PIN</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full bg-primary-light bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-accent"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
+              placeholder="Enter your PIN"
               required
             />
           </div>
 
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center">
-              <input type="checkbox" className="mr-2" />
-              Remember me
-            </label>
-            <Link to="/forgot-password" className="text-accent hover:text-accent-hover">
-              Forgot Password?
-            </Link>
+          <div>
+            <label className="block text-gray-300 mb-2">TOTP</label>
+            <input
+              type="text"
+              value={totp}
+              onChange={(e) => setTotp(e.target.value)}
+              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
+              placeholder="Enter your TOTP"
+              required
+            />
           </div>
 
-          <button type="submit" className="neon-button w-full">
-            Sign In
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full bg-accent text-primary font-semibold p-3 rounded-lg hover:bg-accent/90 transition-colors
+              ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        <p className="text-center mt-6">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-accent hover:text-accent-hover">
-            Sign up
-          </Link>
-        </p>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }

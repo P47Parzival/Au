@@ -1,59 +1,151 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 
-const portfolioHoldings = [
-  { symbol: 'Vrajesh', name: 'Apple Inc.', shares: 50, price: 175.12, value: 8756.00, change: 2.5 },
-  { symbol: 'TSLA', name: 'Tesla Inc.', shares: 30, price: 202.45, value: 6073.50, change: -1.2 },
-  { symbol: 'MSFT', name: 'Microsoft', shares: 25, price: 415.50, value: 10387.50, change: 1.8 },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.', shares: 15, price: 147.60, value: 2214.00, change: 0.5 },
-  { symbol: 'AMZN', name: 'Amazon.com', shares: 20, price: 175.35, value: 3507.00, change: -0.8 },
-];
+interface Holding {
+  tradingsymbol: string;
+  exchange: string;
+  quantity: number;
+  ltp: number;
+  pnl: number;
+  averageprice: number;
+  close: number;
+}
 
-const pieData = {
-  labels: portfolioHoldings.map(stock => stock.symbol),
-  datasets: [
-    {
-      data: portfolioHoldings.map(stock => stock.value),
-      backgroundColor: [
-        'rgba(0, 255, 148, 0.8)',
-        'rgba(123, 63, 228, 0.8)',
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 206, 86, 0.8)',
-      ],
-      borderWidth: 0,
-    },
-  ],
-};
-
-const pieOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-      labels: {
-        color: '#fff',
-      },
-    },
-  },
-};
+interface Position {
+  tradingsymbol: string;
+  netQuantity: number;
+  buyQuantity: number;
+  sellQuantity: number;
+  buyAmount: number;
+  sellAmount: number;
+  dayPl: number;
+  ltp: number;
+}
 
 export function Portfolio() {
-  const totalValue = portfolioHoldings.reduce((sum, stock) => sum + stock.value, 0);
+  const [holdings, setHoldings] = useState<Holding[]>([]);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchPortfolioData();
+    // Set up polling for real-time updates
+    const interval = setInterval(fetchPortfolioData, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchPortfolioData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Fetch holdings
+      const holdingsResponse = await fetch('http://localhost:5000/api/stocks/holdings', {
+        headers
+      });
+      const positionsResponse = await fetch('http://localhost:5000/api/stocks/positions', {
+        headers
+      });
+
+      if (!holdingsResponse.ok || !positionsResponse.ok) {
+        throw new Error('Failed to fetch portfolio data');
+      }
+
+      const holdingsData = await holdingsResponse.json();
+      const positionsData = await positionsResponse.json();
+
+      setHoldings(holdingsData.data || []);
+      setPositions(positionsData.data || []);
+    } catch (err) {
+      setError('Failed to load portfolio data');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const totalValue = holdings.reduce((sum, holding) => sum + (holding.ltp * holding.quantity), 0);
+  const totalPnL = holdings.reduce((sum, holding) => sum + holding.pnl, 0);
+  const dayPnL = positions.reduce((sum, position) => sum + position.dayPl, 0);
+
+  const pieData = {
+    labels: holdings.map(holding => holding.tradingsymbol),
+    datasets: [
+      {
+        data: holdings.map(holding => holding.ltp * holding.quantity),
+        backgroundColor: [
+          'rgba(0, 255, 148, 0.8)',
+          'rgba(123, 63, 228, 0.8)',
+          'rgba(255, 99, 132, 0.8)',
+          'rgba(54, 162, 235, 0.8)',
+          'rgba(255, 206, 86, 0.8)',
+        ],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+        labels: {
+          color: '#fff',
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const value = context.raw;
+            const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `₹${value.toLocaleString()} (${percentage}%)`;
+          },
+        },
+      },
+    },
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="w-[80%] absolute right-6 pb-6"
+      className="flex-1 p-6"
     >
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Portfolio</h1>
         <div className="text-right">
           <p className="text-gray-400">Total Value</p>
-          <p className="text-2xl font-bold text-accent">${totalValue.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-accent">₹{totalValue.toLocaleString()}</p>
         </div>
       </div>
 
@@ -65,23 +157,25 @@ export function Portfolio() {
               <thead>
                 <tr className="text-left border-b border-gray-700">
                   <th className="pb-4">Symbol</th>
-                  <th className="pb-4">Name</th>
-                  <th className="pb-4 text-right">Shares</th>
-                  <th className="pb-4 text-right">Price</th>
-                  <th className="pb-4 text-right">Value</th>
-                  <th className="pb-4 text-right">24h</th>
+                  <th className="pb-4">Exchange</th>
+                  <th className="pb-4 text-right">Qty</th>
+                  <th className="pb-4 text-right">Avg. Price</th>
+                  <th className="pb-4 text-right">LTP</th>
+                  <th className="pb-4 text-right">Current Value</th>
+                  <th className="pb-4 text-right">P&L</th>
                 </tr>
               </thead>
               <tbody>
-                {portfolioHoldings.map((stock) => (
-                  <tr key={stock.symbol} className="border-b border-gray-700/50">
-                    <td className="py-4 font-semibold">{stock.symbol}</td>
-                    <td className="py-4 text-gray-300">{stock.name}</td>
-                    <td className="py-4 text-right">{stock.shares}</td>
-                    <td className="py-4 text-right">${stock.price}</td>
-                    <td className="py-4 text-right">${stock.value.toLocaleString()}</td>
-                    <td className={`py-4 text-right ${stock.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {stock.change >= 0 ? '+' : ''}{stock.change}%
+                {holdings.map((holding) => (
+                  <tr key={holding.tradingsymbol} className="border-b border-gray-700/50">
+                    <td className="py-4 font-semibold">{holding.tradingsymbol}</td>
+                    <td className="py-4 text-gray-300">{holding.exchange}</td>
+                    <td className="py-4 text-right">{holding.quantity}</td>
+                    <td className="py-4 text-right">₹{holding.averageprice.toLocaleString()}</td>
+                    <td className="py-4 text-right">₹{holding.ltp.toLocaleString()}</td>
+                    <td className="py-4 text-right">₹{(holding.ltp * holding.quantity).toLocaleString()}</td>
+                    <td className={`py-4 text-right ${holding.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {holding.pnl >= 0 ? '+' : ''}₹{holding.pnl.toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -96,23 +190,25 @@ export function Portfolio() {
         </div>
 
         <div className="glass-card p-6 lg:col-span-3">
-          <h2 className="text-xl font-semibold mb-4">My Data</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <h2 className="text-xl font-semibold mb-4">Performance</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Daily Return</p>
-              <p className="text-2xl font-bold text-green-400">+1.2%</p>
+              <p className="text-gray-400">Today's P&L</p>
+              <p className={`text-2xl font-bold ${dayPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {dayPnL >= 0 ? '+' : ''}₹{dayPnL.toLocaleString()}
+              </p>
             </div>
             <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Weekly Return</p>
-              <p className="text-2xl font-bold text-red-400">-0.8%</p>
+              <p className="text-gray-400">Overall P&L</p>
+              <p className={`text-2xl font-bold ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {totalPnL >= 0 ? '+' : ''}₹{totalPnL.toLocaleString()}
+              </p>
             </div>
             <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Monthly Return</p>
-              <p className="text-2xl font-bold text-green-400">+5.3%</p>
-            </div>
-            <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Yearly Return</p>
-              <p className="text-2xl font-bold text-green-400">+22.7%</p>
+              <p className="text-gray-400">Total Investment</p>
+              <p className="text-2xl font-bold text-accent">
+                ₹{holdings.reduce((sum, h) => sum + (h.averageprice * h.quantity), 0).toLocaleString()}
+              </p>
             </div>
           </div>
         </div>
