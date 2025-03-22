@@ -31,8 +31,9 @@ interface PortfolioData {
     tradingsymbol: string;
     quantity: number;
     ltp: number;
-    pnl: number;
     averageprice: number;
+    profitandloss: number;
+    pnlpercentage: number;
   }>;
   positions: Array<{
     tradingsymbol: string;
@@ -49,7 +50,6 @@ interface PortfolioData {
   metrics: {
     daily_change: number;
     total_investments: number;
-    total_pl: number;
     daily_pl: number;
   };
 }
@@ -67,13 +67,16 @@ export function Dashboard() {
 
   const fetchPortfolioData = async () => {
     try {
-      const data = await stocksApi.getPortfolio();
-      setPortfolioData(data);
-      setError(null);
+      const response = await stocksApi.getPortfolio();
+      if (response.data) {
+        setPortfolioData(response.data);
+        setError(null);
+      } else {
+        throw new Error('No data received from server');
+      }
     } catch (err) {
       console.error('Portfolio error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load portfolio data');
-      // Don't update portfolioData if there's an error to preserve last known good state
     } finally {
       setLoading(false);
     }
@@ -81,10 +84,10 @@ export function Dashboard() {
 
   // Prepare chart data from historical data
   const chartData = {
-    labels: portfolioData?.historical_data.map(d => new Date(d.timestamp).toLocaleDateString()) || [],
+    labels: portfolioData?.historical_data?.map(d => new Date(d.timestamp).toLocaleDateString()) || [],
     datasets: [{
       label: 'Portfolio Value',
-      data: portfolioData?.historical_data.map(d => d.close) || [],
+      data: portfolioData?.historical_data?.map(d => d.close) || [],
       borderColor: '#00FF94',
       backgroundColor: 'rgba(0, 255, 148, 0.1)',
       tension: 0.4,
@@ -94,9 +97,9 @@ export function Dashboard() {
 
   // Prepare asset allocation data
   const assetAllocation = {
-    labels: portfolioData?.holdings.map(h => h.tradingsymbol) || [],
+    labels: portfolioData?.holdings?.map(h => h.tradingsymbol) || [],
     datasets: [{
-      data: portfolioData?.holdings.map(h => (h.ltp * h.quantity)) || [],
+      data: portfolioData?.holdings?.map(h => (h.ltp * h.quantity)) || [],
       backgroundColor: [
         'rgba(0, 255, 148, 0.8)',
         'rgba(123, 63, 228, 0.8)',
@@ -167,12 +170,9 @@ export function Dashboard() {
               </p>
             </div>
             <div>
-              <p className="text-gray-400">Overall P&L</p>
-              <p className={`text-xl font-semibold ${
-                (portfolioData?.metrics.total_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'
-              }`}>
-                {(portfolioData?.metrics.total_pl || 0) >= 0 ? '+' : ''}
-                ₹{Math.abs(portfolioData?.metrics.total_pl || 0).toLocaleString()}
+              <p className="text-gray-400">Total Investment</p>
+              <p className="text-xl font-semibold text-accent">
+                ₹{(portfolioData?.metrics.total_investments || 0).toLocaleString()}
               </p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export function Dashboard() {
         <div className="glass-card p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold mb-4">Today's Positions</h2>
           <div className="space-y-3">
-            {portfolioData?.positions.map((position, i) => (
+            {(portfolioData?.positions || []).map((position, i) => (
               <div key={i} className="flex justify-between items-center p-3 bg-primary-light rounded-lg">
                 <div>
                   <p className="font-semibold">{position.tradingsymbol}</p>
@@ -194,6 +194,11 @@ export function Dashboard() {
                 </div>
               </div>
             ))}
+            {(!portfolioData?.positions || portfolioData.positions.length === 0) && (
+              <div className="text-center text-gray-400 py-4">
+                No positions for today
+              </div>
+            )}
           </div>
         </div>
       </div>

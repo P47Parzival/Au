@@ -3,36 +3,32 @@ import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 import { stocksApi } from '../services/api';
 
-interface Holding {
-  tradingsymbol: string;
-  exchange: string;
-  quantity: number;
-  ltp: number;
-  pnl: number;
-  averageprice: number;
-  close: number;
-  profitandloss: number;
-  pnlpercentage: number;
-}
-
-interface Position {
-  tradingsymbol: string;
-  netQuantity: number;
-  buyQuantity: number;
-  sellQuantity: number;
-  buyAmount: number;
-  sellAmount: number;
-  dayPl: number;
-  ltp: number;
+interface PortfolioData {
+  total_value: number;
+  holdings: Array<{
+    tradingsymbol: string;
+    exchange: string;
+    quantity: number;
+    ltp: number;
+    averageprice: number;
+    profitandloss: number;
+    pnlpercentage: number;
+  }>;
+  positions: Array<{
+    tradingsymbol: string;
+    netQuantity: number;
+    dayPl: number;
+  }>;
+  metrics: {
+    daily_change: number;
+    total_investments: number;
+    daily_pl: number;
+  };
 }
 
 export function Portfolio() {
-  const [holdings, setHoldings] = useState<Holding[]>([]);
-  const [positions, setPositions] = useState<Position[]>([]);
-  const [loading, setLoading] = useState({
-    holdings: true,
-    positions: true
-  });
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -43,46 +39,26 @@ export function Portfolio() {
 
   const fetchPortfolioData = async () => {
     try {
-      const [holdingsResponse, positionsResponse] = await Promise.all([
-        stocksApi.getHoldings(),
-        stocksApi.getPositions()
-      ]);
-
-      if (holdingsResponse.status) {
-        setHoldings(holdingsResponse.data || []);
+      const response = await stocksApi.getPortfolio();
+      if (response.data) {
+        setPortfolioData(response.data);
+        setError(null);
       } else {
-        console.warn('Holdings fetch warning:', holdingsResponse.message);
-        setHoldings([]);
+        throw new Error('No data received from server');
       }
-
-      if (positionsResponse.status) {
-        setPositions(positionsResponse.data || []);
-      } else {
-        console.warn('Positions fetch warning:', positionsResponse.message);
-        setPositions([]);
-      }
-
-      setError(null);
     } catch (err) {
       console.error('Portfolio data fetch error:', err);
-      setError('Failed to load portfolio data');
+      setError(err instanceof Error ? err.message : 'Failed to load portfolio data');
     } finally {
-      setLoading({
-        holdings: false,
-        positions: false
-      });
+      setLoading(false);
     }
   };
 
-  const totalValue = holdings.reduce((sum, holding) => sum + (holding.ltp * holding.quantity), 0);
-  const totalPnL = holdings.reduce((sum, holding) => sum + holding.profitandloss, 0);
-  const dayPnL = positions.reduce((sum, position) => sum + position.dayPl, 0);
-
   const pieData = {
-    labels: holdings.map(holding => holding.tradingsymbol),
+    labels: portfolioData?.holdings?.map(holding => holding.tradingsymbol) || [],
     datasets: [
       {
-        data: holdings.map(holding => holding.ltp * holding.quantity),
+        data: portfolioData?.holdings?.map(holding => holding.ltp * holding.quantity) || [],
         backgroundColor: [
           'rgba(0, 255, 148, 0.8)',
           'rgba(123, 63, 228, 0.8)',
@@ -117,7 +93,7 @@ export function Portfolio() {
     },
   };
 
-  if (loading.holdings || loading.positions) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
@@ -146,7 +122,7 @@ export function Portfolio() {
         <h1 className="text-3xl font-bold">Portfolio</h1>
         <div className="text-right">
           <p className="text-gray-400">Total Value</p>
-          <p className="text-2xl font-bold text-accent">₹{totalValue.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-accent">₹{portfolioData?.total_value.toLocaleString() || '0'}</p>
         </div>
       </div>
 
@@ -167,7 +143,7 @@ export function Portfolio() {
                 </tr>
               </thead>
               <tbody>
-                {holdings.map((holding) => (
+                {portfolioData?.holdings?.map((holding) => (
                   <tr key={holding.tradingsymbol} className="border-b border-gray-700/50">
                     <td className="py-4 font-semibold">{holding.tradingsymbol}</td>
                     <td className="py-4 text-gray-300">{holding.exchange}</td>
@@ -198,20 +174,23 @@ export function Portfolio() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Today's P&L</p>
-              <p className={`text-2xl font-bold ${dayPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {dayPnL >= 0 ? '+' : ''}₹{dayPnL.toLocaleString()}
-              </p>
-            </div>
-            <div className="p-4 bg-primary-light rounded-lg">
-              <p className="text-gray-400">Overall P&L</p>
-              <p className={`text-2xl font-bold ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {totalPnL >= 0 ? '+' : ''}₹{totalPnL.toLocaleString()}
+              <p className={`text-2xl font-bold ${(portfolioData?.metrics.daily_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {(portfolioData?.metrics.daily_pl || 0) >= 0 ? '+' : ''}₹{Math.abs(portfolioData?.metrics.daily_pl || 0).toLocaleString()}
+                <span className="text-sm ml-1">
+                  ({(portfolioData?.metrics.daily_change || 0).toFixed(2)}%)
+                </span>
               </p>
             </div>
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Total Investment</p>
               <p className="text-2xl font-bold text-accent">
-                ₹{holdings.reduce((sum, h) => sum + (h.averageprice * h.quantity), 0).toLocaleString()}
+                ₹{(portfolioData?.metrics.total_investments || 0).toLocaleString()}
+              </p>
+            </div>
+            <div className="p-4 bg-primary-light rounded-lg">
+              <p className="text-gray-400">Total Value</p>
+              <p className="text-2xl font-bold text-accent">
+                ₹{(portfolioData?.total_value || 0).toLocaleString()}
               </p>
             </div>
           </div>

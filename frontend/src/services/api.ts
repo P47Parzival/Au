@@ -34,36 +34,132 @@ api.interceptors.response.use(
   }
 );
 
+export interface PortfolioData {
+  total_value: number;
+  holdings: Array<{
+    tradingsymbol: string;
+    exchange: string;
+    quantity: number;
+    ltp: number;
+    averageprice: number;
+    profitandloss: number;
+    pnlpercentage: number;
+  }>;
+  positions: Array<{
+    tradingsymbol: string;
+    netQuantity: number;
+    dayPl: number;
+  }>;
+  historical_data: Array<{
+    timestamp: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+  }>;
+  metrics: {
+    daily_change: number;
+    total_investments: number;
+    daily_pl: number;
+  };
+}
+
 interface ApiResponse<T> {
   data: T;
   message?: string;
-  status: number;
+  status: boolean;
+}
+
+interface ApiResult<T> {
+  status: boolean;
+  data: T | null;
+  message?: string;
 }
 
 export const stocksApi = {
-  getPortfolio: async () => {
-    const response = await api.get<ApiResponse<any>>('/stocks/portfolio');
-    return response.data;
+  getPortfolio: async (): Promise<ApiResult<PortfolioData>> => {
+    try {
+      const response = await api.get<PortfolioData>('/stocks/portfolio');
+      return {
+        status: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Portfolio fetch error:', error);
+      return {
+        status: false,
+        data: null,
+        message: error instanceof Error ? error.message : 'Failed to fetch portfolio data'
+      };
+    }
   },
 
   getHoldings: async () => {
-    const response = await api.get<ApiResponse<any>>('/stocks/holdings');
-    return response.data;
+    try {
+      const response = await api.get<ApiResponse<any>>('/stocks/holdings');
+      return {
+        status: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Holdings fetch error:', error);
+      return {
+        status: false,
+        data: [],
+        message: error instanceof Error ? error.message : 'Failed to fetch holdings data'
+      };
+    }
   },
 
   getPositions: async () => {
-    const response = await api.get<ApiResponse<any>>('/stocks/positions');
-    return response.data;
+    try {
+      const response = await api.get<ApiResponse<any>>('/stocks/positions');
+      return {
+        status: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Positions fetch error:', error);
+      return {
+        status: false,
+        data: [],
+        message: error instanceof Error ? error.message : 'Failed to fetch positions data'
+      };
+    }
   },
 
   getMarketData: async () => {
-    const response = await api.get<ApiResponse<any>>('/stocks/market');
-    return response.data;
+    try {
+      const response = await api.get<ApiResponse<any>>('/stocks/market');
+      return {
+        status: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Market data fetch error:', error);
+      return {
+        status: false,
+        data: null,
+        message: error instanceof Error ? error.message : 'Failed to fetch market data'
+      };
+    }
   },
 
   getMarketNews: async () => {
-    const response = await api.get<ApiResponse<any>>('/stocks/news');
-    return response.data;
+    try {
+      const response = await api.get<ApiResponse<any>>('/stocks/news');
+      return {
+        status: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Market news fetch error:', error);
+      return {
+        status: false,
+        data: [],
+        message: error instanceof Error ? error.message : 'Failed to fetch market news'
+      };
+    }
   }
 };
 
