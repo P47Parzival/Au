@@ -11,6 +11,8 @@ interface Holding {
   pnl: number;
   averageprice: number;
   close: number;
+  profitandloss: number;
+  pnlpercentage: number;
 }
 
 interface Position {
@@ -41,18 +43,29 @@ export function Portfolio() {
 
   const fetchPortfolioData = async () => {
     try {
-      const [holdingsData, positionsData] = await Promise.all([
+      const [holdingsResponse, positionsResponse] = await Promise.all([
         stocksApi.getHoldings(),
         stocksApi.getPositions()
       ]);
 
-      setHoldings(holdingsData.data || []);
-      setPositions(positionsData.data || []);
+      if (holdingsResponse.status) {
+        setHoldings(holdingsResponse.data || []);
+      } else {
+        console.warn('Holdings fetch warning:', holdingsResponse.message);
+        setHoldings([]);
+      }
+
+      if (positionsResponse.status) {
+        setPositions(positionsResponse.data || []);
+      } else {
+        console.warn('Positions fetch warning:', positionsResponse.message);
+        setPositions([]);
+      }
+
       setError(null);
     } catch (err) {
       console.error('Portfolio data fetch error:', err);
       setError('Failed to load portfolio data');
-      // Don't update state if there's an error to preserve last known good state
     } finally {
       setLoading({
         holdings: false,
@@ -62,7 +75,7 @@ export function Portfolio() {
   };
 
   const totalValue = holdings.reduce((sum, holding) => sum + (holding.ltp * holding.quantity), 0);
-  const totalPnL = holdings.reduce((sum, holding) => sum + holding.pnl, 0);
+  const totalPnL = holdings.reduce((sum, holding) => sum + holding.profitandloss, 0);
   const dayPnL = positions.reduce((sum, position) => sum + position.dayPl, 0);
 
   const pieData = {
@@ -162,8 +175,11 @@ export function Portfolio() {
                     <td className="py-4 text-right">₹{holding.averageprice.toLocaleString()}</td>
                     <td className="py-4 text-right">₹{holding.ltp.toLocaleString()}</td>
                     <td className="py-4 text-right">₹{(holding.ltp * holding.quantity).toLocaleString()}</td>
-                    <td className={`py-4 text-right ${holding.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {holding.pnl >= 0 ? '+' : ''}₹{holding.pnl.toLocaleString()}
+                    <td className={`py-4 text-right ${holding.profitandloss >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {holding.profitandloss >= 0 ? '+' : ''}₹{holding.profitandloss.toLocaleString()}
+                      <span className="text-sm ml-1">
+                        ({holding.pnlpercentage >= 0 ? '+' : ''}{holding.pnlpercentage.toFixed(2)}%)
+                      </span>
                     </td>
                   </tr>
                 ))}
