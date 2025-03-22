@@ -10,6 +10,7 @@ import { Login } from './pages/Login';
 import { Layout } from './components/Layout';
 import { BrokerageCalculator } from './pages/BrokerageCalculator';
 import { ThemeProvider } from './contexts/ThemeContext';
+import SEBIrules from './pages/SEBIrules';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -60,21 +61,31 @@ function AppRoutes() {
         }
       />
       <Route 
-        path="/settings" 
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Settings />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
         path="/calculator"
         element={
           <ProtectedRoute>
             <Layout>
               <BrokerageCalculator />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/sebi-rules" 
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <SEBIrules />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/settings" 
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Settings />
             </Layout>
           </ProtectedRoute>
         }

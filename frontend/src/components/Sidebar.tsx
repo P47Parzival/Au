@@ -6,7 +6,8 @@ import {
   PieChart, 
   TrendingUp, 
   Settings,
-  Calculator
+  Calculator,
+  BookOpen
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -45,6 +46,12 @@ export function Sidebar() {
           }>
             <Calculator className="w-5 h-5" />
             <span className="text-adaptive">Calculators</span>
+          </NavLink>
+          <NavLink to="/sebi-rules" className={({ isActive }) => 
+            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
+          }>
+            <BookOpen className="w-5 h-5" />
+            <span className="text-adaptive">SEBI Rules</span>
           </NavLink>
           <NavLink to="/settings" className={({ isActive }) => 
             `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
