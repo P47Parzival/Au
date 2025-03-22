@@ -8,7 +8,7 @@ export function Settings() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="space-y-6 w-[80%] absolute right-6"
+      className="w-[80%] absolute right-6 pb-6"
     >
       <h1 className="text-3xl font-bold mb-8">Settings</h1>
 
