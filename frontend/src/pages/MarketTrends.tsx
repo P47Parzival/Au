@@ -3,8 +3,8 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Line } from 'react-chartjs-2';
 
-const ANGEL_API_KEY = import.meta.env.VITE_ANGEL_API_KEY;
-const ANGEL_SECRET_KEY = import.meta.env.VITE_ANGEL_SECRET_KEY;
+const ANGEL_API_KEY = ZEiLPDbG;
+const ANGEL_SECRET_KEY = 170a3703-2dd5-4ffa-893a-fa265b37b524;
 
 const marketData = {
   labels: ['9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00'],
