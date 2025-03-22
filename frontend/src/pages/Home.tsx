@@ -33,7 +33,7 @@ export function Home() {
               Get personalized insights, real-time analysis, and predictive market trends.
             </p>
             <Link 
-              to="/signup" 
+              to="/dashboard" 
               className="neon-button inline-flex items-center gap-2"
             >
               Get Started <ChevronRight className="w-5 h-5" />
