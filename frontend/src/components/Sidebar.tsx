@@ -10,7 +10,7 @@ import {
 
 export function Sidebar() {
   return (
-    <aside className="w-64 h-screen glass-card border-r border-gray-700/30">
+    <aside className="w-64 h-screen glass-card border-r border-gray-700/30 fixed">
       <div className="p-6">
         <div className="flex items-center gap-2 mb-8">
           <Brain className="w-8 h-8 text-accent" />
