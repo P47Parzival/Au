@@ -95,7 +95,7 @@ def get_portfolio():
                              for holding in holdings_data)
         total_current_value = sum(float(holding['ltp']) * float(holding['quantity']) 
                                 for holding in holdings_data)
-        total_pl = sum(float(holding['pnl']) for holding in holdings_data)
+        # total_pl = sum(float(holding['pnl']) for holding in holdings_data)
 
         # Calculate daily change from positions
         daily_pl = sum(float(position['dayPl']) for position in positions_data) if positions_data else 0
@@ -120,7 +120,7 @@ def get_portfolio():
             "metrics": {
                 "daily_change": daily_change,
                 "total_investments": total_investment,
-                "total_pl": total_pl,
+                # "total_pl": total_pl,
                 "daily_pl": daily_pl
             }
         })
