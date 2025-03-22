@@ -18,7 +18,7 @@ export function Sidebar() {
       <div className="p-6">
         <div className="flex items-center gap-2 mb-8">
           <Brain className="w-8 h-8 text-accent" />
-          <span className="text-xl font-bold text-adaptive">FinanceAI</span>
+          <span className="text-xl font-bold text-adaptive">TradeWise</span>
         </div>
 
         <nav className="space-y-2">

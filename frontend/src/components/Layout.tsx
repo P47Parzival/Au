@@ -22,7 +22,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <div className="w-64 fixed h-full glass-card border-r border-border-color transition-all duration-300">
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-accent mb-10">FinanceAI</h1>
+          <h1 className="text-2xl font-bold text-accent mb-10">TradeWise</h1>
           
           <nav className="space-y-2">
             {navItems.map((item) => {
