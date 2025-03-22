@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Line, Doughnut } from 'react-chartjs-2';
+import { stocksApi } from '../services/api';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -60,44 +61,19 @@ export function Dashboard() {
 
   useEffect(() => {
     fetchPortfolioData();
-    // Set up polling for real-time updates
-    const interval = setInterval(fetchPortfolioData, 60000); // Update every minute
+    const interval = setInterval(fetchPortfolioData, 60000);
     return () => clearInterval(interval);
   }, []);
 
   const fetchPortfolioData = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const response = await fetch('http://localhost:5000/api/stocks/portfolio', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Portfolio fetch error:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorData
-        });
-        throw new Error(errorData.message || 'Failed to fetch portfolio data');
-      }
-
-      const data = await response.json();
-      if (!data) {
-        throw new Error('No data received from server');
-      }
-      console.log('Portfolio data:', data); // Debug log
+      const data = await stocksApi.getPortfolio();
       setPortfolioData(data);
+      setError(null);
     } catch (err) {
-      console.error('Portfolio error details:', err);
+      console.error('Portfolio error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load portfolio data');
+      // Don't update portfolioData if there's an error to preserve last known good state
     } finally {
       setLoading(false);
     }

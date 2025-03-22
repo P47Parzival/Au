@@ -5,13 +5,11 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0A1929',
-          light: '#132F4C',
+          DEFAULT: 'var(--color-primary)',
+          light: 'var(--color-primary-light)',
+          dark: 'var(--color-primary-dark)',
         },
-        accent: {
-          DEFAULT: '#00FF94',
-          hover: '#00CC77',
-        },
+        accent: 'var(--color-accent)',
         secondary: {
           DEFAULT: '#7B3FE4',
           light: '#9B6AE8',

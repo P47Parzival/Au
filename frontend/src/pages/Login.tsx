@@ -1,95 +1,117 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Login() {
-  const [clientId, setClientId] = useState('S55255319'); // Default from AngelLogin.py
-  const [pin, setPin] = useState('1234'); // Default from AngelLogin.py
+  const [clientId, setClientId] = useState('');
+  const [pin, setPin] = useState('');
   const [totp, setTotp] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      await login(clientId, pin, totp);
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          password: pin,
+          totp,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      login(data.token);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials or server error');
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen flex items-center justify-center bg-primary"
-    >
-      <div className="glass-card p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login with Angel One</h1>
-        
+    <div className="min-h-screen flex items-center justify-center bg-primary p-4">
+      <div className="max-w-md w-full space-y-8 p-8 bg-primary-light rounded-xl">
+        <div>
+          <h1 className="text-3xl font-bold text-center text-accent mb-2">TradeWise</h1>
+          <h2 className="text-xl text-center text-gray-400">Login to your account</h2>
+        </div>
+
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-100 p-3 rounded-lg mb-4">
+          <div className="bg-red-500/20 text-red-500 p-4 rounded-lg text-center">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-gray-300 mb-2">Client ID</label>
+            <label htmlFor="clientId" className="block text-sm font-medium text-gray-400">
+              Client ID
+            </label>
             <input
+              id="clientId"
               type="text"
+              required
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
-              placeholder="Enter your Angel One Client ID"
-              required
+              className="mt-1 block w-full px-4 py-3 bg-primary border border-gray-700 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">PIN</label>
+            <label htmlFor="pin" className="block text-sm font-medium text-gray-400">
+              PIN
+            </label>
             <input
+              id="pin"
               type="password"
+              required
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
-              placeholder="Enter your PIN"
-              required
+              className="mt-1 block w-full px-4 py-3 bg-primary border border-gray-700 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-2">TOTP</label>
+            <label htmlFor="totp" className="block text-sm font-medium text-gray-400">
+              TOTP
+            </label>
             <input
+              id="totp"
               type="text"
+              required
               value={totp}
               onChange={(e) => setTotp(e.target.value)}
-              className="w-full bg-primary-light p-3 rounded-lg border border-gray-600 focus:border-accent focus:outline-none"
-              placeholder="Enter your TOTP"
-              required
+              className="mt-1 block w-full px-4 py-3 bg-primary border border-gray-700 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-accent text-primary font-semibold p-3 rounded-lg hover:bg-accent/90 transition-colors
-              ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full py-3 px-4 bg-accent text-primary rounded-lg font-medium ${
+              loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent/90'
+            }`}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>
-    </motion.div>
+    </div>
   );
 }

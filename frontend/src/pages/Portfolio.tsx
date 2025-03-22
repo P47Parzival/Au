@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
+import { stocksApi } from '../services/api';
 
 interface Holding {
   tradingsymbol: string;
@@ -26,50 +27,37 @@ interface Position {
 export function Portfolio() {
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({
+    holdings: true,
+    positions: true
+  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPortfolioData();
-    // Set up polling for real-time updates
-    const interval = setInterval(fetchPortfolioData, 60000); // Update every minute
+    const interval = setInterval(fetchPortfolioData, 60000);
     return () => clearInterval(interval);
   }, []);
 
   const fetchPortfolioData = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const headers = {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      };
-
-      // Fetch holdings
-      const holdingsResponse = await fetch('http://localhost:5000/api/stocks/holdings', {
-        headers
-      });
-      const positionsResponse = await fetch('http://localhost:5000/api/stocks/positions', {
-        headers
-      });
-
-      if (!holdingsResponse.ok || !positionsResponse.ok) {
-        throw new Error('Failed to fetch portfolio data');
-      }
-
-      const holdingsData = await holdingsResponse.json();
-      const positionsData = await positionsResponse.json();
+      const [holdingsData, positionsData] = await Promise.all([
+        stocksApi.getHoldings(),
+        stocksApi.getPositions()
+      ]);
 
       setHoldings(holdingsData.data || []);
       setPositions(positionsData.data || []);
+      setError(null);
     } catch (err) {
+      console.error('Portfolio data fetch error:', err);
       setError('Failed to load portfolio data');
-      console.error(err);
+      // Don't update state if there's an error to preserve last known good state
     } finally {
-      setLoading(false);
+      setLoading({
+        holdings: false,
+        positions: false
+      });
     }
   };
 
@@ -116,7 +104,7 @@ export function Portfolio() {
     },
   };
 
-  if (loading) {
+  if (loading.holdings || loading.positions) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
