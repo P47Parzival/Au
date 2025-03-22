@@ -14,6 +14,7 @@
     "axios": "^1.8.4",
     "chart.js": "^4.4.2",
     "framer-motion": "^11.0.8",
+    "lucide-react": "^latest",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",

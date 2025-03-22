@@ -8,6 +8,8 @@ import { MarketTrends } from './pages/MarketTrends';
 import { Settings } from './pages/Settings';
 import { Login } from './pages/Login';
 import { Layout } from './components/Layout';
+import { BrokerageCalculator } from './pages/BrokerageCalculator';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -67,6 +69,16 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/calculator"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <BrokerageCalculator />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
       <Route 
         path="/" 
         element={isAuthenticated ? <Navigate to="/dashboard" /> : <Home />} 
@@ -79,9 +91,11 @@ export default function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-primary text-white">
-          <AppRoutes />
-        </div>
+        <ThemeProvider>
+          <div className="min-h-screen bg-primary text-white">
+            <AppRoutes />
+          </div>
+        </ThemeProvider>
       </AuthProvider>
     </Router>
   );

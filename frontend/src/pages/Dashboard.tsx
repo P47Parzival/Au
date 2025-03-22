@@ -13,6 +13,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { TrendingUp, ArrowUpRight, ArrowDownRight, Briefcase } from 'lucide-react';
 
 ChartJS.register(
   CategoryScale,
@@ -133,73 +134,89 @@ export function Dashboard() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="pb-6 w-[80%] absolute right-6"
+      className="fade-in"
     >
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      <h1 className="page-title">Dashboard</h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="glass-card p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Portfolio Overview</h2>
-          <Line data={chartData} options={chartOptions} />
+      <div className="responsive-grid mb-6">
+        <div className="glass-card">
+          <h2 className="text-adaptive">Total Portfolio Value</h2>
+          <div className="stats-card">
+            <span className="stats-label">Current Value</span>
+            <span className="stats-value">₹{portfolioData?.total_value.toLocaleString() || 0}</span>
+          </div>
         </div>
         
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-semibold mb-4">Asset Allocation</h2>
-          <Doughnut data={assetAllocation} options={doughnutOptions} />
-        </div>
-
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-semibold mb-4">Quick Stats</h2>
-          <div className="space-y-4">
-            <div>
-              <p className="text-gray-400">Total Value</p>
-              <p className="text-2xl font-bold text-accent">
-                ₹{portfolioData?.total_value.toLocaleString() || 0}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400">Today's P&L</p>
-              <p className={`text-xl font-semibold ${
-                (portfolioData?.metrics.daily_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'
-              }`}>
+        <div className="glass-card">
+          <h2 className="text-adaptive">Today's P&L</h2>
+          <div className="stats-card">
+            <span className="stats-label">Profit/Loss</span>
+            <div className="flex items-center">
+              <span className={`stats-value ${(portfolioData?.metrics.daily_pl || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {(portfolioData?.metrics.daily_pl || 0) >= 0 ? '+' : ''}
                 ₹{Math.abs(portfolioData?.metrics.daily_pl || 0).toLocaleString()}
-                <span className="text-sm ml-1">
-                  ({(portfolioData?.metrics.daily_change || 0).toFixed(2)}%)
-                </span>
-              </p>
+              </span>
+              {(portfolioData?.metrics.daily_change || 0) >= 0 ? (
+                <ArrowUpRight className="w-5 h-5 text-green-400 ml-2" />
+              ) : (
+                <ArrowDownRight className="w-5 h-5 text-red-400 ml-2" />
+              )}
             </div>
-            <div>
-              <p className="text-gray-400">Total Investment</p>
-              <p className="text-xl font-semibold text-accent">
-                ₹{(portfolioData?.metrics.total_investments || 0).toLocaleString()}
-              </p>
-            </div>
+            <span className="text-adaptive-secondary text-sm">
+              ({(portfolioData?.metrics.daily_change || 0).toFixed(2)}%)
+            </span>
           </div>
         </div>
-
-        <div className="glass-card p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Today's Positions</h2>
-          <div className="space-y-3">
-            {(portfolioData?.positions || []).map((position, i) => (
-              <div key={i} className="flex justify-between items-center p-3 bg-primary-light rounded-lg">
-                <div>
-                  <p className="font-semibold">{position.tradingsymbol}</p>
-                  <p className="text-sm text-gray-400">Qty: {position.netQuantity}</p>
-                </div>
-                <div className="text-right">
-                  <p className={position.dayPl >= 0 ? 'text-green-400' : 'text-red-400'}>
-                    {position.dayPl >= 0 ? '+' : '-'}₹{Math.abs(position.dayPl).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-            {(!portfolioData?.positions || portfolioData.positions.length === 0) && (
-              <div className="text-center text-gray-400 py-4">
-                No positions for today
-              </div>
-            )}
+        
+        <div className="glass-card">
+          <h2 className="text-adaptive">Total Investment</h2>
+          <div className="stats-card">
+            <span className="stats-label">Invested Amount</span>
+            <span className="stats-value">₹{(portfolioData?.metrics.total_investments || 0).toLocaleString()}</span>
           </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="glass-card lg:col-span-2 portfolio-overview">
+          <h2 className="chart-title">Portfolio Overview</h2>
+          <div className="chart-container">
+            <Line data={chartData} options={chartOptions} />
+          </div>
+        </div>
+        
+        <div className="glass-card asset-allocation">
+          <h2 className="chart-title">Asset Allocation</h2>
+          <div className="chart-container">
+            <Doughnut data={assetAllocation} options={doughnutOptions} />
+          </div>
+        </div>
+      </div>
+
+      <div className="glass-card">
+        <div className="flex items-center mb-4">
+          <Briefcase className="w-6 h-6 text-accent mr-2" />
+          <h2 className="subtitle mb-0">Today's Positions</h2>
+        </div>
+        
+        <div className="responsive-grid">
+          {(portfolioData?.positions || []).map((position, i) => (
+            <div key={i} className="stats-card">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-semibold text-adaptive">{position.tradingsymbol}</span>
+                <span className={`px-2 py-1 rounded text-sm ${position.dayPl >= 0 ? 'bg-green-400/20 text-green-400' : 'bg-red-400/20 text-red-400'}`}>
+                  {position.dayPl >= 0 ? '+' : '-'}₹{Math.abs(position.dayPl).toLocaleString()}
+                </span>
+              </div>
+              <span className="text-adaptive-secondary">Qty: {position.netQuantity}</span>
+            </div>
+          ))}
+          
+          {(!portfolioData?.positions || portfolioData.positions.length === 0) && (
+            <div className="text-center p-10 text-adaptive-secondary">
+              No positions for today
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
@@ -212,7 +229,7 @@ const chartOptions = {
     legend: {
       position: 'top' as const,
       labels: {
-        color: '#fff',
+        color: 'var(--text-primary)', // Use theme variable
       },
     },
   },
@@ -220,10 +237,10 @@ const chartOptions = {
     y: {
       type: 'linear' as const,
       grid: {
-        color: 'rgba(255, 255, 255, 0.1)',
+        color: 'var(--border-color)', // Use theme variable
       },
       ticks: {
-        color: '#fff',
+        color: 'var(--text-primary)', // Use theme variable
         callback: function(value: number | string) {
           if (typeof value === 'number') {
             return '₹' + value.toLocaleString();
@@ -235,10 +252,10 @@ const chartOptions = {
     x: {
       type: 'category' as const,
       grid: {
-        color: 'rgba(255, 255, 255, 0.1)',
+        color: 'var(--border-color)', // Use theme variable
       },
       ticks: {
-        color: '#fff',
+        color: 'var(--text-primary)', // Use theme variable
       },
     },
   },
@@ -250,10 +267,18 @@ const doughnutOptions = {
     legend: {
       position: 'top' as const,
       labels: {
-        color: '#fff',
+        color: 'var(--text-primary)', // Use theme variable
+        font: {
+          weight: 500
+        }
       },
     },
     tooltip: {
+      backgroundColor: 'var(--color-primary-light)',
+      titleColor: 'var(--text-primary)',
+      bodyColor: 'var(--text-primary)',
+      borderColor: 'var(--border-color)',
+      borderWidth: 1,
       callbacks: {
         label: (context: any) => {
           const value = context.raw;
