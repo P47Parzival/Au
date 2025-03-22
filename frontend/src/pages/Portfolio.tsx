@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 
 const portfolioHoldings = [
-  { symbol: 'AAPL', name: 'Apple Inc.', shares: 50, price: 175.12, value: 8756.00, change: 2.5 },
+  { symbol: 'Vrajesh', name: 'Apple Inc.', shares: 50, price: 175.12, value: 8756.00, change: 2.5 },
   { symbol: 'TSLA', name: 'Tesla Inc.', shares: 30, price: 202.45, value: 6073.50, change: -1.2 },
   { symbol: 'MSFT', name: 'Microsoft', shares: 25, price: 415.50, value: 10387.50, change: 1.8 },
   { symbol: 'GOOGL', name: 'Alphabet Inc.', shares: 15, price: 147.60, value: 2214.00, change: 0.5 },
@@ -96,7 +96,7 @@ export function Portfolio() {
         </div>
 
         <div className="glass-card p-6 lg:col-span-3">
-          <h2 className="text-xl font-semibold mb-4">Performance Metrics</h2>
+          <h2 className="text-xl font-semibold mb-4">My Data</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Daily Return</p>
