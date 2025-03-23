@@ -153,7 +153,7 @@ TradewiseAI revolutionizes personal finance by combining cutting-edge AI with re
 
 ```bash
 # Clone the repository
-git clone https://github.com/codecartels/tradewise.git
+git clone https://github.com/P47Parzival/Au.git
 
 # Install dependencies
 cd tradewise
