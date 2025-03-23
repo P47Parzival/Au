@@ -19,13 +19,22 @@ const ChatBot: React.FC<ChatBotProps> = ({ portfolio }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    query: input,
-                    portfolio: portfolio
+                    message: input,
+                    userPortfolio: portfolio
                 }),
             });
             
             const data = await response.json();
-            setMessages(prev => [...prev, { type: 'bot', content: data.response }]);
+            
+            if (response.ok) {
+                setMessages(prev => [...prev, { type: 'bot', content: data.response }]);
+            } else {
+                console.error('Chat API error:', data.error || 'Unknown error');
+                setMessages(prev => [...prev, { 
+                    type: 'bot', 
+                    content: `Error: ${data.error || 'Unknown error occurred'}` 
+                }]);
+            }
         } catch (error) {
             console.error('Chat error:', error);
             setMessages(prev => [...prev, { 
@@ -51,6 +60,11 @@ const ChatBot: React.FC<ChatBotProps> = ({ portfolio }) => {
     return (
         <div className="flex flex-col h-[600px] bg-white/10 backdrop-blur-lg rounded-lg p-4">
             <div className="flex-1 overflow-y-auto space-y-4">
+                {messages.length === 0 && (
+                    <div className="text-center text-gray-400 mt-4">
+                        Ask me anything about your portfolio!
+                    </div>
+                )}
                 {messages.map((msg, idx) => (
                     <div key={idx} 
                          className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>

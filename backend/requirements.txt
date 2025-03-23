@@ -11,4 +11,6 @@ websocket-client==1.7.0
 smartapi-python
 pyotp
 logzero
-pycryptodome 
+pycryptodome
+google-cloud-aiplatform
+google-generativeai

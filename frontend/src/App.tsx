@@ -12,6 +12,7 @@ import { BrokerageCalculator } from './pages/BrokerageCalculator';
 import { ThemeProvider } from './contexts/ThemeContext';
 import SEBIrules from './pages/SEBIrules';
 import { TradingView } from './pages/Graph';
+import { ChatBot } from './pages/Chatbot';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -98,6 +99,16 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <Settings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <ChatBot />
             </Layout>
           </ProtectedRoute>
         }
