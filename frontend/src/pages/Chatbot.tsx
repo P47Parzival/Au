@@ -39,6 +39,19 @@ export function ChatBot() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Load messages from localStorage on component mount
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -78,6 +91,16 @@ export function ChatBot() {
     }
   };
 
+  // Function to format message content with proper line breaks
+  const formatMessageContent = (content: string) => {
+    return content.split('\n').map((line, i) => (
+      <span key={i}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -96,12 +119,12 @@ export function ChatBot() {
             {messages.map((message, index) => (
               <div key={index}>
                 <div className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-[80%] p-3 rounded-lg ${
+                  <div className={`max-w-[80%] p-3 rounded-lg whitespace-pre-line ${
                     message.role === 'assistant'
                       ? 'bg-primary-light text-adaptive'
                       : 'bg-accent text-primary'
                   }`}>
-                    {message.content}
+                    {formatMessageContent(message.content)}
                   </div>
                 </div>
               </div>

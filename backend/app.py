@@ -120,8 +120,8 @@ def chat():
         message = data["message"]
         print(f"📝 Received message: {message}")
 
-        # Create simple prompt
-        prompt = f"""As a financial advisor, analyze this portfolio and answer: {message}
+        # Create simple prompt with bullet-point format
+        prompt = f"""As a financial advisor, analyze this portfolio and answer {message} in a very concise way.
 
 Portfolio:
 - HYUNDAI: 7 shares at ₹1960
@@ -129,7 +129,25 @@ Portfolio:
 - Investment Goal: Long-term wealth generation
 - Risk Tolerance: Medium
 
-Important: Format your response without using markdown symbols (*, #). Use plain text with proper spacing and indentation."""
+Format your response exactly like this, with each point on a new line:
+
+Current Portfolio:
+• Point 1
+• Point 2
+
+Key Risks:
+• Risk 1
+• Risk 2
+
+Recommendations:
+• Recommendation 1
+• Recommendation 2
+• Recommendation 3
+
+Note:
+• Single line conclusion
+
+Keep each point brief and specific. Total response under 100 words."""
 
         # Get response from Gemini
         print("🤖 Requesting Gemini response...")
@@ -144,9 +162,32 @@ Important: Format your response without using markdown symbols (*, #). Use plain
         formatted_response = formatted_response.replace('*', '')
         formatted_response = formatted_response.replace('#', '')
         formatted_response = formatted_response.replace('**', '')
-        # Fix spacing
-        formatted_response = formatted_response.replace('\n\n', '\n')
-        # Add proper line breaks for readability
+        
+        # Ensure proper line breaks
+        # Replace multiple newlines with single newline
+        formatted_response = '\n'.join(line.strip() for line in formatted_response.split('\n') if line.strip())
+        
+        # Ensure section headers have line breaks
+        sections = ['Current Portfolio:', 'Key Risks:', 'Recommendations:', 'Note:']
+        for section in sections:
+            formatted_response = formatted_response.replace(section, f"\n{section}\n")
+        
+        # Ensure bullet points start on new lines and are properly spaced
+        formatted_response = formatted_response.replace('•', '\n•')
+        
+        # Clean up any extra newlines while preserving intentional breaks
+        lines = [line for line in formatted_response.split('\n') if line.strip()]
+        formatted_response = '\n'.join(lines)
+        
+        # Add extra line break between sections for better readability
+        formatted_response = formatted_response.replace('\nKey', '\n\nKey')
+        formatted_response = formatted_response.replace('\nRecommendations', '\n\nRecommendations')
+        formatted_response = formatted_response.replace('\nNote', '\n\nNote')
+        
+        # Ensure consistent spacing after bullet points
+        formatted_response = formatted_response.replace('•', '• ')
+        
+        # Remove any trailing/leading whitespace while preserving internal formatting
         formatted_response = formatted_response.strip()
 
         print("✅ Got response from Gemini")

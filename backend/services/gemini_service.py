@@ -42,8 +42,7 @@ class GeminiService:
 
             User Question: {user_query}
 
-            Please provide your analysis and advice in response to the user's specific question.
-            """
+            Please provide your analysis and advice in response to the user's specific question in short (100 words max)
 
             response = self.model.generate_content(analysis_prompt)
             return response.text
