@@ -90,7 +90,7 @@ export function ChatBot() {
       <div className="glass-card">
         <div className="flex items-center gap-2 mb-4">
           <MessageCircle className="w-6 h-6 text-accent" />
-          <h1 className="text-xl font-semibold">AI Financial Advisor</h1>
+          <h1 className="text-xl text-blue-500 font-semibold">AI Financial Advisor</h1>
         </div>
 
         <div className="h-[600px] flex flex-col">
