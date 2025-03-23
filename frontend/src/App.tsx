@@ -12,6 +12,7 @@ import { BrokerageCalculator } from './pages/BrokerageCalculator';
 import { ThemeProvider } from './contexts/ThemeContext';
 import SEBIrules from './pages/SEBIrules';
 import { TradingView } from './pages/Graph';
+import PaymentPage from './pages/PaymentPage';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -98,6 +99,16 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <Settings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/payment" 
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <PaymentPage />
             </Layout>
           </ProtectedRoute>
         }
