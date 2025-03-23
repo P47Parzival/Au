@@ -41,7 +41,8 @@
 }
 
 body {
-  @apply bg-primary text-white;
+  background-color: var(--color-primary);
+  color: white;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -53,7 +54,7 @@ body {
 
 /* Add text color override for light mode */
 :root.light-mode body {
-  @apply text-gray-900;
+  color: #1a202c;
 }
 
 /* Update card styles */
@@ -62,12 +63,13 @@ body {
   backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--border-color);
   box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   border-color: var(--color-accent);
+  transform: translateY(-2px);
 }
 
 /* Add glass card override for light mode */
@@ -81,77 +83,214 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-@layer base {
-  body {
-    @apply bg-primary text-gray-100;
+/* Base styles */
+body {
+  background-color: var(--color-primary);
+  color: #f3f4f6;
+}
+
+/* Component styles */
+.glass-card {
+  background-color: var(--color-primary-light);
+  background-opacity: 0.3;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+}
+  
+.neon-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 0 20px rgba(0, 255, 148, 0.5);
+}
+
+.neon-button:active {
+  transform: scale(0.95);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+/* Dark mode styles */
+.sidebar-link:hover {
+  background-color: var(--primary-light-hover);
+  color: var(--color-accent);
+}
+
+.sidebar-link.active {
+  background-color: var(--color-accent);
+  color: var(--text-primary);
+  box-shadow: 0 0 20px rgba(0, 255, 148, 0.2);
+}
+
+/* Light mode styles (keeping existing) */
+:root.light-mode .sidebar-link {
+  color: var(--text-primary);
+}
+
+:root.light-mode .sidebar-link:hover {
+  background-color: var(--primary-light-hover);
+  color: var(--color-accent);
+}
+
+:root.light-mode .sidebar-link.active {
+  background-color: var(--color-accent);
+  color: white;
+}
+  
+.stats-card {
+  background: var(--color-primary-light);
+  border: 1px solid var(--border-color);
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+  
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+
+/* Trading view container styles */
+.trading-view-container {
+  width: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.trading-view-header {
+  background: var(--color-primary-light);
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Loading animation for charts */
+.loader {
+  border: 3px solid var(--border-color);
+  border-radius: 50%;
+  border-top: 3px solid var(--color-accent);
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Custom styles for chart elements */
+.bg-color-accent {
+  background-color: var(--color-accent);
+}
+
+.text-color-primary {
+  color: var(--color-primary);
+}
+
+.border-color-accent {
+  border-color: var(--color-accent);
+}
+
+.ring-color-accent {
+  --tw-ring-color: var(--color-accent);
+}
+
+/* Custom scrollbar for tables */
+.custom-table-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-table-container::-webkit-scrollbar-track {
+  background: var(--color-primary-light);
+}
+
+.custom-table-container::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 3px;
+}
+
+.custom-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@layer components {
-  .glass-card {
-    @apply bg-primary-light bg-opacity-30 backdrop-blur-lg border border-gray-700/30 rounded-xl shadow-xl p-6;
-  }
-  
-  .neon-button {
-    @apply px-6 py-3 bg-accent text-primary font-semibold rounded-lg 
-           transition-all duration-300 hover:bg-accent-hover
-           hover:shadow-[0_0_20px_rgba(0,255,148,0.5)] 
-           active:transform active:scale-95;
-  }
-
-  .sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    color: var(--text-primary);
-    transition: all 0.2s ease;
-  }
-
-  /* Dark mode styles */
-  .sidebar-link:hover {
-    background-color: var(--primary-light-hover);
-    color: var(--color-accent);
-  }
-
-  .sidebar-link.active {
-    background-color: var(--color-accent);
-    color: var(--text-primary);
-    box-shadow: 0 0 20px rgba(0, 255, 148, 0.2);
-  }
-
-  /* Light mode styles (keeping existing) */
-  :root.light-mode .sidebar-link {
-    color: var(--text-primary);
-  }
-
-  :root.light-mode .sidebar-link:hover {
-    background-color: var(--primary-light-hover);
-    color: var(--color-accent);
-  }
-
-  :root.light-mode .sidebar-link.active {
-    background-color: var(--color-accent);
-    color: white;
-  }
-  
-  .stats-card {
-    background: var(--color-primary-light);
-    border: 1px solid var(--border-color);
-    padding: 1.25rem;
-    border-radius: 0.75rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .stats-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--card-shadow);
-  }
-  
+@media (min-width: 1024px) {
   .responsive-grid {
-    @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+@media (min-width: 1280px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* SEBI Rules specific styles */
+.sebi-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.sebi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, var(--color-accent), transparent);
+}
+
+/* Accent dot styles */
+.accent-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Update link hover effects */
+.hover-link {
+  transition: color 0.2s ease;
+}
+
+.hover-link:hover {
+  color: var(--color-accent);
 }
 
 /* Form elements */
@@ -182,7 +321,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .text-adaptive-secondary {
-  color: var(--text-secondary);
+  color: var (--text-secondary);
   transition: color 0.3s ease;
 }
 
@@ -308,7 +447,10 @@ input:focus, select:focus, textarea:focus {
 
 /* Additional UI enhancements */
 .page-title {
-  @apply text-3xl font-bold mb-6 text-adaptive;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
   position: relative;
   display: inline-block;
 }
@@ -339,11 +481,26 @@ input:focus, select:focus, textarea:focus {
 }
 
 .card-grid {
-  @apply grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .dashboard-layout {
-  @apply p-6 w-full;
+  padding: 1.5rem;
+  width: 100%;
   max-width: calc(100vw - 256px);
   margin-left: 256px;
 }
