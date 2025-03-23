@@ -13,6 +13,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import SEBIrules from './pages/SEBIrules';
 import { TradingView } from './pages/Graph';
 import { ChatBot } from './pages/Chatbot';
+import PaymentPage from './pages/PaymentPage';
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -109,6 +110,16 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <ChatBot />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/payment"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <PaymentPage />
             </Layout>
           </ProtectedRoute>
         }

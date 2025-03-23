@@ -42,7 +42,7 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
 
     if (error) {
         return (
-            <div className="text-red-500 p-4 bg-red-50 rounded-lg">
+            <div className="text-red-400 bg-red-400/10 p-4 rounded-lg">
                 Error: {error}
             </div>
         );
@@ -52,10 +52,10 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
         <div className="w-full">
             {approvalUrl ? (
                 <div className="space-y-4">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-blue-800 mb-2">Test Account Details:</h3>
-                        <p className="text-sm text-blue-700">Email: sb-47qy4g2011234@personal.example.com</p>
-                        <p className="text-sm text-blue-700">Password: test1234</p>
+                    <div className="glass-card p-4">
+                        <h3 className="font-semibold text-adaptive mb-2">Test Account Details:</h3>
+                        <p className="text-sm text-adaptive-secondary">Email: sb-47qy4g2011234@personal.example.com</p>
+                        <p className="text-sm text-adaptive-secondary">Password: test1234</p>
                     </div>
                     <a 
                         href={approvalUrl} 
@@ -64,7 +64,7 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
                         className="block w-full"
                     >
                         <button 
-                            className="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                            className="w-full bg-accent hover:bg-accent-hover text-primary px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50"
                             disabled={isLoading}
                         >
                             Complete Payment on PayPal
@@ -73,15 +73,15 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
                 </div>
             ) : (
                 <div className="space-y-4">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-gray-800 mb-2">Test Mode</h3>
-                        <p className="text-sm text-gray-600">
+                    <div className="glass-card p-4">
+                        <h3 className="font-semibold text-adaptive mb-2">Test Mode</h3>
+                        <p className="text-sm text-adaptive-secondary">
                             This is a test payment. You'll be redirected to PayPal's sandbox environment.
                         </p>
                     </div>
                     <button
                         onClick={createOrder}
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-accent hover:bg-accent-hover text-primary px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50"
                         disabled={isLoading}
                     >
                         {isLoading ? 'Processing...' : 'Pay with PayPal'}
@@ -92,4 +92,4 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
     );
 };
 
-export default PayPalPayment; 
+export default PayPalPayment;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { LogOut, Moon, Sun, ClipboardList ,LayoutDashboard, PieChart, TrendingUp, Calculator, Settings, MessageCircle } from 'lucide-react';
+import { LogOut, Moon, Sun, ClipboardList ,LayoutDashboard, PieChart, TrendingUp, Calculator, Settings, MessageCircle, CreditCard } from 'lucide-react';
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
@@ -13,6 +13,7 @@ const navItems = [
   { path: '/graph', label: 'Graph', Icon: TrendingUp },
   { path: '/settings', label: 'Settings', Icon: Settings },
   { path: '/chat', label: 'AI Advisor', Icon: MessageCircle },
+  { path: '/payment', label: 'Payment', Icon: CreditCard },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
