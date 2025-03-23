@@ -8,6 +8,7 @@ declare global {
 
 export const TradingView: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isDarkMode = document.documentElement.classList.contains('light-mode') ? false : true;
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -17,11 +18,11 @@ export const TradingView: React.FC = () => {
       if (containerRef.current && window.TradingView) {
         new window.TradingView.widget({
           width: '100%',
-          height: '800',
+          height: '700',
           symbol: 'BINANCE:BTCUSDT',
           interval: '1D',
           timezone: 'Etc/UTC',
-          theme: 'dark',
+          theme: isDarkMode ? 'dark' : 'light',
           style: '1',
           locale: 'en',
           enable_publishing: false,
@@ -50,13 +51,13 @@ export const TradingView: React.FC = () => {
           ],
           container_id: containerRef.current.id,
           library_path: '/charting_library/',
-          toolbar_bg: '#1a1a1a',
-          loading_screen: { backgroundColor: "#1a1a1a" },
+          toolbar_bg: isDarkMode ? '#1e293b' : '#f8fafc',
+          loading_screen: { backgroundColor: isDarkMode ? "#0f172a" : "#ffffff" },
           overrides: {
-            "mainSeriesProperties.candleStyle.upColor": "#26a69a",
-            "mainSeriesProperties.candleStyle.downColor": "#ef5350",
-            "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
-            "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350"
+            "mainSeriesProperties.candleStyle.upColor": "#4ade80",
+            "mainSeriesProperties.candleStyle.downColor": "#f43f5e",
+            "mainSeriesProperties.candleStyle.wickUpColor": "#4ade80",
+            "mainSeriesProperties.candleStyle.wickDownColor": "#f43f5e"
           },
           disabled_features: [
             "header_screenshot"
@@ -74,20 +75,32 @@ export const TradingView: React.FC = () => {
     return () => {
       script.remove();
     };
-  }, []);
+  }, [isDarkMode]);
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">Trading Charts</h1>
-      <div className="flex flex-col items-center gap-4">
+    <div className="p-6 w-full max-w-[1400px] mx-auto fade-in">
+      <h1 className="page-title mb-8">Trading Charts</h1>
+      
+      <div className="glass-card p-0 overflow-hidden mb-8 transition-all">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border-color">
+          <div className="text-adaptive font-medium">Real-time market data</div>
+          <div className="text-adaptive-secondary text-sm">
+            Powered by TradingView
+          </div>
+        </div>
+        
         <div 
           id="tradingview_widget" 
           ref={containerRef} 
-          className="w-[1175px] rounded-lg shadow-lg bg-gray-900 ml-4"
-          style={{ height: '800px' }}
+          className="w-full"
+          style={{ height: '700px' }}
         />
-        <div className="text-sm text-gray-400 ml-24">
-        </div>
+      </div>
+      
+   
+      
+      <div className="text-adaptive-secondary text-sm mt-4">
+        Data is provided for informational purposes only. Au does not guarantee accuracy or timeliness of the information displayed.
       </div>
     </div>
   );

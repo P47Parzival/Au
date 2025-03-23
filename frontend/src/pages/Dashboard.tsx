@@ -229,7 +229,10 @@ const chartOptions = {
     legend: {
       position: 'top' as const,
       labels: {
-        color: 'var(--text-primary)', // Use theme variable
+        color: 'var(--chart-text)', // Changed to chart-text to match theme
+        font: {
+          weight: 500
+        }
       },
     },
   },
@@ -237,10 +240,10 @@ const chartOptions = {
     y: {
       type: 'linear' as const,
       grid: {
-        color: 'var(--border-color)', // Use theme variable
+        color: 'var(--chart-grid)', // Use chart grid color variable
       },
       ticks: {
-        color: 'var(--text-primary)', // Use theme variable
+        color: 'var(--chart-text)', // Use chart text color variable
         callback: function(value: number | string) {
           if (typeof value === 'number') {
             return '₹' + value.toLocaleString();
@@ -252,10 +255,10 @@ const chartOptions = {
     x: {
       type: 'category' as const,
       grid: {
-        color: 'var(--border-color)', // Use theme variable
+        color: 'var(--chart-grid)', // Use chart grid color variable
       },
       ticks: {
-        color: 'var(--text-primary)', // Use theme variable
+        color: 'var(--chart-text)', // Use chart text color variable
       },
     },
   },
@@ -267,7 +270,7 @@ const doughnutOptions = {
     legend: {
       position: 'top' as const,
       labels: {
-        color: 'var(--text-primary)', // Use theme variable
+        color: 'var(--chart-text)', // Changed to chart-text to match theme
         font: {
           weight: 500
         }
@@ -275,8 +278,8 @@ const doughnutOptions = {
     },
     tooltip: {
       backgroundColor: 'var(--color-primary-light)',
-      titleColor: 'var(--text-primary)',
-      bodyColor: 'var(--text-primary)',
+      titleColor: 'var(--chart-text)', // Changed to chart-text to match theme
+      bodyColor: 'var(--chart-text)', // Changed to chart-text to match theme
       borderColor: 'var(--border-color)',
       borderWidth: 1,
       callbacks: {

@@ -132,6 +132,17 @@ export function Login() {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <div className="text-center mt-4">
+            <a 
+              href="https://smartapi.angelbroking.com/enable-totp" // Replace with your actual TOTP link
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-accent transition-colors text-sm flex items-center justify-center gap-2"
+            >
+              Don't have TOTP? Click here
+            </a>
+          </div>
         </form>
       </div>
     </div>
