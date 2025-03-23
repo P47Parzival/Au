@@ -6,7 +6,8 @@ import {
   PieChart, 
   TrendingUp, 
   Settings,
-  Calculator
+  Calculator,
+  BookOpen
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 

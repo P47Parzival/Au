@@ -2,13 +2,15 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { LogOut, Moon, Sun, LayoutDashboard, PieChart, TrendingUp, Calculator, Settings } from 'lucide-react';
+import { LogOut, Moon, Sun, ClipboardList ,LayoutDashboard, PieChart, TrendingUp, Calculator, Settings } from 'lucide-react';
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
   { path: '/portfolio', label: 'Portfolio', Icon: PieChart },
   { path: '/market', label: 'Market', Icon: TrendingUp },
   { path: '/calculator', label: 'Calculator', Icon: Calculator },
+  { path: '/sebi-rules', label: 'SEBI Rules', Icon: ClipboardList },
+  { path: '/graph', label: 'Graph', Icon: TrendingUp },
   { path: '/settings', label: 'Settings', Icon: Settings },
 ];
 
