@@ -100,10 +100,28 @@ body {
   }
 
   .sidebar-link {
-    @apply flex items-center gap-3 px-4 py-3 rounded-lg 
-           transition-all duration-200 text-adaptive;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
   }
 
+  /* Dark mode styles */
+  .sidebar-link:hover {
+    background-color: var(--primary-light-hover);
+    color: var(--color-accent);
+  }
+
+  .sidebar-link.active {
+    background-color: var(--color-accent);
+    color: var(--text-primary);
+    box-shadow: 0 0 20px rgba(0, 255, 148, 0.2);
+  }
+
+  /* Light mode styles (keeping existing) */
   :root.light-mode .sidebar-link {
     color: var(--text-primary);
   }

@@ -22,36 +22,24 @@ export function Sidebar() {
         </div>
 
         <nav className="space-y-2">
-          <NavLink to="/dashboard" className={({ isActive }) => 
-            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
-          }>
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="text-adaptive">Dashboard</span>
-          </NavLink>
-          <NavLink to="/portfolio" className={({ isActive }) => 
-            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
-          }>
-            <PieChart className="w-5 h-5" />
-            <span className="text-adaptive">Portfolio</span>
-          </NavLink>
-          <NavLink to="/market" className={({ isActive }) => 
-            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
-          }>
-            <TrendingUp className="w-5 h-5" />
-            <span className="text-adaptive">Market Trends</span>
-          </NavLink>
-          <NavLink to="/calculator" className={({ isActive }) => 
-            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
-          }>
-            <Calculator className="w-5 h-5" />
-            <span className="text-adaptive">Calculators</span>
-          </NavLink>
-          <NavLink to="/settings" className={({ isActive }) => 
-            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
-          }>
-            <Settings className="w-5 h-5" />
-            <span className="text-adaptive">Settings</span>
-          </NavLink>
+          {[
+            { to: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" />, label: "Dashboard" },
+            { to: "/portfolio", icon: <PieChart className="w-5 h-5" />, label: "Portfolio" },
+            { to: "/market", icon: <TrendingUp className="w-5 h-5" />, label: "Market Trends" },
+            { to: "/calculator", icon: <Calculator className="w-5 h-5" />, label: "Calculators" },
+            { to: "/settings", icon: <Settings className="w-5 h-5" />, label: "Settings" },
+          ].map(({ to, icon, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => 
+                `sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              {icon}
+              <span className="text-adaptive">{label}</span>
+            </NavLink>
+          ))}
         </nav>
       </div>
     </aside>

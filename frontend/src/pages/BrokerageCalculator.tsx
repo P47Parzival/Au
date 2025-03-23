@@ -557,7 +557,7 @@ const BrokerageCalculator: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Invested Amount</p>
-              <p className="text-xl font-bold">{formatCurrency(investedAmount)}</p>
+              <p className="text-xl text-black font-bold">{formatCurrency(investedAmount)}</p>
             </div>
             
             <div className="p-4 bg-primary-light rounded-lg">
@@ -638,7 +638,7 @@ const BrokerageCalculator: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Invested Amount</p>
-              <p className="text-xl font-bold">{formatCurrency(investedAmount)}</p>
+              <p className="text-xl text-black font-bold">{formatCurrency(investedAmount)}</p>
             </div>
             
             <div className="p-4 bg-primary-light rounded-lg">
@@ -728,7 +728,7 @@ const BrokerageCalculator: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-primary-light rounded-lg">
               <p className="text-gray-400">Principal Amount</p>
-              <p className="text-xl font-bold">{formatCurrency(investedAmount)}</p>
+              <p className="text-xl text-black font-bold">{formatCurrency(investedAmount)}</p>
             </div>
             
             <div className="p-4 bg-primary-light rounded-lg">
