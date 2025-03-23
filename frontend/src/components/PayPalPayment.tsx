@@ -67,11 +67,11 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
         <div className="w-full">
             {approvalUrl ? (
                 <div className="space-y-4">
-                    <div className="glass-card p-4">
+                    {/* <div className="glass-card p-4">
                         <h3 className="font-semibold text-adaptive mb-2">Test Account Details:</h3>
                         <p className="text-sm text-adaptive-secondary">Email: sb-47qy4g2011234@personal.example.com</p>
                         <p className="text-sm text-adaptive-secondary">Password: test1234</p>
-                    </div>
+                    </div> */}
                     <a 
                         href={approvalUrl} 
                         target="_blank" 
