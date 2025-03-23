@@ -47,6 +47,12 @@ export function Sidebar() {
             <Calculator className="w-5 h-5" />
             <span className="text-adaptive">Calculators</span>
           </NavLink>
+          <NavLink to="/graph" className={({ isActive }) => 
+            `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
+          }>
+            <TrendingUp className="w-5 h-5" />
+            <span className="text-adaptive">Graph</span>
+          </NavLink>
           <NavLink to="/sebi-rules" className={({ isActive }) => 
             `sidebar-link ${isActive ? 'bg-accent text-primary' : ''}`
           }>

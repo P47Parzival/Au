@@ -10,6 +10,7 @@ const navItems = [
   { path: '/market', label: 'Market', Icon: TrendingUp },
   { path: '/calculator', label: 'Calculator', Icon: Calculator },
   { path: '/sebi-rules', label: 'SEBI Rules', Icon: ClipboardList },
+  { path: '/graph', label: 'Graph', Icon: TrendingUp },
   { path: '/settings', label: 'Settings', Icon: Settings },
 ];
 
