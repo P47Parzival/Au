@@ -1,27 +1,35 @@
-# import paypalrestsdk
-
-# paypalrestsdk.configure({
-#     "mode": "sandbox",  # Change to "live" for production
-#     "client_id": "AVjkFVgkSnZXx3oNOZgVNaT7ql6Cd7Rayexr6O15-eUQ_bXBt9GOMJt_OkmqEph7tKbmHaWZrASuL8bY",
-#     "client_secret": "EO_a10pqk2sGh4Z-DQHukXPc9hpsMQin_VWjmO0kQ7SQ4K-ZGpBaAgewT41kNQMh54W-slzpSLrJz6f_"
-# })
-
 import paypalrestsdk
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+# Load environment variables from .env file
+load_dotenv()
 
 client_id = os.getenv("PAYPAL_CLIENT_ID")
 client_secret = os.getenv("PAYPAL_CLIENT_SECRET")
 mode = os.getenv("PAYPAL_MODE", "sandbox")
 
-print(f"PayPal Client ID: {client_id}")
-print(f"PayPal Client Secret: {client_secret}")
+# Verify credentials exist
+if not client_id or not client_secret:
+    raise ValueError("PayPal credentials not found in environment. Please check your .env file.")
+
 print(f"PayPal Mode: {mode}")
+print(f"PayPal Client ID: {client_id[:5]}...{client_id[-5:]}")
+print(f"PayPal Client Secret: {client_secret[:5]}...{client_secret[-5:]}")
 
 paypalrestsdk.configure({
     "mode": mode,  # Default to sandbox if not set
     "client_id": client_id,
     "client_secret": client_secret
 })
+
+# Test the credentials to catch configuration issues early
+try:
+    test_payment = paypalrestsdk.Payment.find("PAY-TEST")
+except paypalrestsdk.ResourceNotFound:
+    # This is expected - we're just testing authentication
+    print("PayPal SDK configured successfully.")
+except paypalrestsdk.UnauthorizedAccess:
+    raise ValueError("PayPal credentials are invalid. Please check your CLIENT_ID and CLIENT_SECRET.")
+except Exception as e:
+    print(f"PayPal SDK connection warning: {str(e)}")

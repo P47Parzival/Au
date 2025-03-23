@@ -11,6 +11,7 @@ import google.generativeai as genai
 # Import routes
 from routes.stocks import stocks_bp
 from routes.auth import auth_bp
+from routes.payment import payment_bp
 
 # Load environment variables
 load_dotenv()
@@ -21,15 +22,22 @@ app = Flask(__name__)
 # Set secret key with a default value if not in environment
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-super-secret-key-12345')
 
-# Enable CORS
-CORS(app, resources={r"/*": {"origins": "*"}})
+# Enable CORS with proper configuration
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:3002"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # Initialize SocketIO
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins=["http://localhost:3002"])
 
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(stocks_bp, url_prefix='/api/stocks')
+app.register_blueprint(payment_bp, url_prefix='/api')  # This will handle /api/create-payment and /api/execute-payment
 
 # Static portfolio data
 STATIC_PORTFOLIO = {

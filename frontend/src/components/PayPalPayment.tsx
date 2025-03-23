@@ -27,13 +27,21 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
             });
 
             const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || `Server error: ${response.status}`);
+            }
+            
             if (data.error) {
                 throw new Error(data.error);
             }
+            
             setApprovalUrl(data.approval_url);
             onSuccess?.(data.payment_id);
         } catch (err: any) {
-            setError(err.message || 'An error occurred');
+            console.error("PayPal payment error:", err);
+            const errorMessage = err.message || 'An error occurred connecting to PayPal';
+            setError(errorMessage);
             onError?.(err);
         } finally {
             setIsLoading(false);
@@ -42,8 +50,15 @@ const PayPalPayment = ({ amount, onSuccess, onError }: PayPalPaymentProps) => {
 
     if (error) {
         return (
-            <div className="text-red-400 bg-red-400/10 p-4 rounded-lg">
-                Error: {error}
+            <div className="text-red-400 bg-red-400/10 p-4 rounded-lg mb-4">
+                <p className="font-semibold mb-1">Payment Error</p>
+                <p>{error}</p>
+                <button 
+                    onClick={() => setError(null)}
+                    className="mt-2 text-sm text-accent hover:underline"
+                >
+                    Try Again
+                </button>
             </div>
         );
     }
