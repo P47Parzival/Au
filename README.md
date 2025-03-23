@@ -31,32 +31,22 @@
   <tr>
     <td width="50%">
       <h3 align="center">🤖 AI-Powered Financial Advice</h3>
-      <p align="center">
-        <img src="./assets/AI_Advice.svg" alt="AI Advice" width="120px" height="120px" />
-      </p>
       <p align="center">Personalized investment recommendations using LLAMA-3 via Groq API</p>
     </td>
     <td width="50%">
       <h3 align="center">📊 Real-Time Market Data</h3>
-      <p align="center">
-        <img src="./assets/Market_Data.svg" alt="Market Data" width="120px" height="120px" />
-      </p>
       <p align="center">Live stock market updates and tracking through Angel One API</p>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <h3 align="center">🔗 Demat Account Integration</h3>
+      <h3 align="center">🧮 ALL in 1 Calculator</h3>
       <p align="center">
-        <img src="./assets/Demat.svg" alt="Demat Integration" width="120px" height="120px" />
       </p>
       <p align="center">Seamlessly link your Angel One account to track your portfolio</p>
     </td>
     <td width="50%">
       <h3 align="center">💬 AI Financial Assistant</h3>
-      <p align="center">
-        <img src="./assets/Chatbot.svg" alt="AI Chat" width="120px" height="120px" />
-      </p>
       <p align="center">Real-time conversational AI to answer your financial questions</p>
     </td>
   </tr>
@@ -138,7 +128,6 @@ TradewiseAI revolutionizes personal finance by combining cutting-edge AI with re
 ## ✅ Project Progress
 
 <div align="center">
-  <h3>100% Complete</h3>
   <div style="background-color: #ddd; border-radius: 10px; height: 20px; width: 80%; margin: 0 auto;">
     <div style="background-color: #4CAF50; height: 100%; width: 100%; border-radius: 10px;"></div>
   </div>
@@ -186,21 +175,21 @@ npm run dev
   <table>
     <tr>
       <td align="center">
-        <a href="https://github.com/vrajesh">
+        <a href="https://github.com/Vrajesh-Sharma">
           <img src="https://github.com/vrajesh.png" width="100px;" alt="Vrajesh Sharma"/>
           <br />
           <sub><b>Vrajesh Sharma</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/dhruvmali">
+        <a href="https://github.com/P47Parzival">
           <img src="https://github.com/dhruvmali.png" width="100px;" alt="Dhruv Mali"/>
           <br />
           <sub><b>Dhruv Mali</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/siddhantsan">
+        <a href="https://github.com/siddhant4357">
           <img src="https://github.com/siddhantsan.png" width="100px;" alt="Siddhant Sankesara"/>
           <br />
           <sub><b>Siddhant Sankesara</b></sub>
@@ -209,14 +198,14 @@ npm run dev
     </tr>
     <tr>
       <td align="center">
-        <a href="https://github.com/dhwanishdesai">
+        <a href="https://github.com/Dhwanish08">
           <img src="https://github.com/dhwanishdesai.png" width="100px;" alt="Dhwanish Desai"/>
           <br />
           <sub><b>Dhwanish Desai</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/harshilupadhyay">
+        <a href="https://github.com/Harshil000">
           <img src="https://github.com/harshilupadhyay.png" width="100px;" alt="Harshil Upadhyay"/>
           <br />
           <sub><b>Harshil Upadhyay</b></sub>
