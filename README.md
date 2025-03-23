@@ -14,7 +14,7 @@
 </div>
 
 <div align="center">
-  <sub>Built with ❤️ by <a href="https://github.com/codecartels">Code Cartels</a></sub>
+  <sub>Built with ❤️ by <a href="https://github.com/P47Parzival/Au/tree/main">Code Cartels</a></sub>
 </div>
 
 <br />
@@ -153,7 +153,7 @@ TradewiseAI revolutionizes personal finance by combining cutting-edge AI with re
 
 ```bash
 # Clone the repository
-git clone https://github.com/P47Parzival/Au.git
+git clone https://github.com/codecartels/tradewise.git
 
 # Install dependencies
 cd tradewise
@@ -169,58 +169,11 @@ npm run dev
 
 ---
 
-## 👥 The Team
+## 👥 The Team Code Cartels
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/Vrajesh-Sharma">
-          <img src="https://github.com/vrajesh.png" width="100px;" alt="Vrajesh Sharma"/>
-          <br />
-          <sub><b>Vrajesh Sharma</b></sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/P47Parzival">
-          <img src="https://github.com/dhruvmali.png" width="100px;" alt="Dhruv Mali"/>
-          <br />
-          <sub><b>Dhruv Mali</b></sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/siddhant4357">
-          <img src="https://github.com/siddhantsan.png" width="100px;" alt="Siddhant Sankesara"/>
-          <br />
-          <sub><b>Siddhant Sankesara</b></sub>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/Dhwanish08">
-          <img src="https://github.com/dhwanishdesai.png" width="100px;" alt="Dhwanish Desai"/>
-          <br />
-          <sub><b>Dhwanish Desai</b></sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/Harshil000">
-          <img src="https://github.com/harshilupadhyay.png" width="100px;" alt="Harshil Upadhyay"/>
-          <br />
-          <sub><b>Harshil Upadhyay</b></sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/codecartels">
-          <img src="https://github.com/codecartels.png" width="100px;" alt="Code Cartels"/>
-          <br />
-          <sub><b>Code Cartels</b></sub>
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
+<p align="center">
+  <img src="https://github.com/P47Parzival/Au/blob/main/assets/WhatsApp%20Image%202025-03-23%20at%2010.42.59_259ce921.jpg?raw=true" alt="TradewiseAI Dashboard" width="700px" />
+</p>
 
 ---
 
