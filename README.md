@@ -75,12 +75,11 @@ TradewiseAI revolutionizes personal finance by combining cutting-edge AI with re
     </tr>
     <tr>
       <td><img src="./assets/Calculator.jpg" width="100%" /><br><em>Investment Calculator</em></td>
-      <td><img src="./assets/Settings.jpg" width="100%" /><br><em>User Settings</em></td>
+      <td><img src="https://github.com/P47Parzival/Au/blob/main/assets/WhatsApp%20Image%202025-03-23%20at%2011.05.30_84f7ca50.jpg?raw=true" width="100%" /><br><em>Chat Bot</em></td>
     </tr>
   </table>
 </div>
 <h4>We have both light and dark mode</h4>
----
 
 ## ⚙️ Tech Stack
 
