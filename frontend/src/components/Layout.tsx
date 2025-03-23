@@ -7,7 +7,7 @@ import { LogOut, Moon, Sun, ClipboardList ,LayoutDashboard, PieChart, TrendingUp
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
   { path: '/portfolio', label: 'Portfolio', Icon: PieChart },
-  { path: '/market', label: 'Market', Icon: TrendingUp },
+  // { path: '/market', label: 'Market', Icon: TrendingUp },
   { path: '/calculator', label: 'Calculator', Icon: Calculator },
   { path: '/sebi-rules', label: 'SEBI Rules', Icon: ClipboardList },
   { path: '/graph', label: 'Graph', Icon: TrendingUp },

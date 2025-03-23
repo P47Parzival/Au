@@ -25,14 +25,14 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-super-secret-key-12345'
 # Enable CORS with proper configuration
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:3002"],
+        "origins": ["http://localhost:3000"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
 })
 
 # Initialize SocketIO
-socketio = SocketIO(app, cors_allowed_origins=["http://localhost:3002"])
+socketio = SocketIO(app, cors_allowed_origins=["http://localhost:3000"])
 
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
