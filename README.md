@@ -1,104 +1,183 @@
-## Code Cartel
+# <div align="center">TradewiseAI 📈💼🤖</div>
 
-# 🚀 AI-Powered Financial Advisory Dashboard
+<div align="center">
+  
+  ![GitHub stars](https://img.shields.io/github/stars/codecartels/tradewise?style=for-the-badge&color=yellow)
+  ![GitHub forks](https://img.shields.io/github/forks/codecartels/tradewise?style=for-the-badge&color=blue)
+  ![GitHub issues](https://img.shields.io/github/issues/codecartels/tradewise?style=for-the-badge&color=red)
+  ![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
+  
+</div>
 
-## **📌 Project Overview**
-This project is an **AI-driven investment dashboard** that allows users to:
-✅ Get **personalized financial advice** using **LLAMA (Groq API)**.  
-✅ View **real-time stock market data** from **AngelOne API**.  
-✅ **Link their Demat account via Angel One API** to fetch **live stock holdings**.  
-✅ **Chat with AI in real time** to ask **financial questions**.  
+<div align="center">
+  <strong>Your Personal AI-Powered Financial Advisor</strong>
+</div>
 
-## **🎨 UI Showcase**
-Here's a glimpse of our modern and intuitive user interface:
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/P47Parzival/Au/tree/main">Code Cartels</a></sub>
+</div>
 
-### Dashboard View
-![Dashboard Interface](./assets/Dashboard.jpg)
-*Main dashboard showing portfolio overview, market trends, and AI insights*
+<br />
 
-### Portfolio Analysis
-![Portfolio View](./assets/Portfolio.jpg)
-*Detailed portfolio analysis with real-time stock tracking (dark theme available)*
-
-### Investment Calculator
-![Calculator Interface](./assets/Calculator.jpg)
-*Smart investment calculator for financial planning*
-
-### User Settings
-![Settings Panel](./assets/Settings.jpg)
-*Customizable user settings and preferences*
-
-### Sign Up Experience
-![Sign Up Page](./assets/SignUp.jpg)
-*Streamlined user onboarding process*
+<p align="center">
+  <img src="./assets/Dashboard.jpg" alt="TradewiseAI Dashboard" width="700px" />
+</p>
 
 ---
 
-## **✅ What We Have Completed**
-### **1️⃣ Frontend (React Vite + TailwindCSS)**
-- **Modern UI Implementation** 🎨 → Created sleek, responsive design with glass-morphism effects.
-- **Authentication Pages** 🔐 → Implemented login & signup with Supabase Auth.
-- **Dashboard Page** 📊 → Built interactive dashboard with portfolio overview and market trends.
-- **Portfolio Analysis** 📈 → Developed detailed portfolio tracking with real-time updates.
-- **Investment Calculator** 🧮 → Created tool for financial planning and calculations.
-- **Settings Panel** ⚙️ → Implemented user preferences and account management.
-- **Interactive Charts** 📈 → Integrated Chart.js for real-time data visualization.
-- **Responsive Design** 📱 → Ensured perfect display across all device sizes.
+## ✨ Features
 
-### **2️⃣ Backend (Flask + Supabase)**
-- **User Authentication** 👤 → Complete Supabase auth system with email & OAuth.
-- **Database Setup** 💾 → Configured Supabase PostgreSQL for user data storage.
-- **API Integration** 🔌 → Connected Angel One API for market data.
-- **Error Handling** 🛡️ → Implemented robust error management system.
-- **Security Measures** 🔒 → Added API key protection and request validation.
-
----
-
-## **🔜 What We Need to Complete**
-### **1️⃣ AI Integration**
-- **Groq API Setup** 🤖 → Need to fix API connection and model selection.
-- **Portfolio Analysis AI** 📊 → Implement AI-driven investment insights.
-- **Real-time Chat** 💬 → Complete the AI chatbot integration.
-
-### **2️⃣ Angel One API Integration**
-
-
-- **Transaction History** 📜 → Add historical trading data display.
-
-### **3️⃣ Final Touches**
-- **Performance Optimization** ⚡ → Improve load times and responsiveness.
-- **Testing** 🧪 → Complete end-to-end testing of all features.
-- **Documentation** 📝 → Finalize API documentation and setup guides.
-- **Deployment** 🚀 → Deploy to production environment.
+<table>
+  <tr>
+    <td width="50%">
+      <h3 align="center">🤖 AI-Powered Financial Advice</h3>
+      <p align="center">Personalized investment recommendations using LLAMA-3 via Groq API</p>
+    </td>
+    <td width="50%">
+      <h3 align="center">📊 Real-Time Market Data</h3>
+      <p align="center">Live stock market updates and tracking through Angel One API</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3 align="center">🧮 ALL in 1 Calculator</h3>
+      <p align="center">
+      </p>
+      <p align="center">Seamlessly link your Angel One account to track your portfolio</p>
+    </td>
+    <td width="50%">
+      <h3 align="center">💬 AI Financial Assistant</h3>
+      <p align="center">Real-time conversational AI to answer your financial questions</p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## **📌 Tech Stack**
-| **Component**  | **Technology Used**  |
-|---------------|----------------------|
-| **Frontend**  | React Vite + TailwindCSS + Chart.js |
-| **Backend**   | Flask |
-| **Database**  | Supabase (PostgreSQL) |
-| **Auth System** | Angel One (user login) |
-| **AI Model**  | **Groq API (LLAMA-3)** |
-| **Stock Data** | Angel One |
-| **Brokerage API** | **Angel One API (for portfolio fetching)** |
-| **Chatbot System** | Groq API (LLM-based real-time conversation) |
-| **Deployment** | Vercel (Frontend) + Render (Backend) |
+## 🎯 Project Overview
+
+TradewiseAI revolutionizes personal finance by combining cutting-edge AI with real-time market data. Our platform enables users to:
+
+- Receive **tailored investment advice** based on your financial goals and risk tolerance
+- Monitor **real-time stock performance** with interactive visualizations
+- Access your **actual portfolio holdings** directly from your Angel One account
+- **Chat with our AI assistant** for instant answers to financial questions
 
 ---
 
-## **📌 Next Steps**
-🔹 **Fine-tune chatbot for better user experience**.  
-🔹 **Ensure Angel One API integration is fully secure and optimized**.  
-🔹 **Deploy and test the system with real users**.  
-🔹 **Make final UX improvements before the hackathon ends**.  
+## 📱 UI Showcase
 
-🚀 **We're close to finalizing the project! Let's complete these final steps!** 🎯
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="./assets/Dashboard.jpg" width="100%" /><br><em>Main Dashboard</em></td>
+      <td><img src="./assets/Portfolio.jpg" width="100%" /><br><em>Portfolio Analysis</em></td>
+    </tr>
+    <tr>
+      <td><img src="./assets/Calculator.jpg" width="100%" /><br><em>Investment Calculator</em></td>
+      <td><img src="https://github.com/P47Parzival/Au/blob/main/assets/WhatsApp%20Image%202025-03-23%20at%2011.05.30_84f7ca50.jpg?raw=true" width="100%" /><br><em>Chat Bot</em></td>
+    </tr>
+  </table>
+</div>
+<h4>We have both light and dark mode</h4>
 
+## ⚙️ Tech Stack
 
-- Vrajesh Sharma
-- Dhruv Mali
-- Siddhant Sankesara
-- Dhwanish Desai
-- Harshil Upadhyay
+<div align="center">
+  <table>
+    <tr>
+      <th>Category</th>
+      <th>Technologies</th>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td>
+        <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+        <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+        <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
+        <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white" alt="Chart.js" />
+      </td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td>
+        <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
+      </td>
+    </tr>
+    <tr>
+      <td>AI & Data</td>
+      <td>
+        <img src="https://img.shields.io/badge/Groq_API-FF5700?style=for-the-badge&logo=groq&logoColor=white" alt="Groq API" />
+        <img src="https://img.shields.io/badge/Mistral_Saba_24B-8A2BE2?style=for-the-badge&logo=mistral&logoColor=white" alt="Mistral Saba 24B" />
+        <img src="https://img.shields.io/badge/Angel_One_API-0076CE?style=for-the-badge&logo=api&logoColor=white" alt="Angel One API" />
+      </td>
+    </tr>
+    <tr>
+      <td>Deployment</td>
+      <td>
+        <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+        <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## ✅ Project Progress
+
+<div align="center">
+  <div style="background-color: #ddd; border-radius: 10px; height: 20px; width: 80%; margin: 0 auto;">
+    <div style="background-color: #4CAF50; height: 100%; width: 100%; border-radius: 10px;"></div>
+  </div>
+</div>
+
+### 🏆 Completed
+- ✅ Modern responsive frontend with glass-morphism UI
+- ✅ User authentication & account management
+- ✅ Interactive financial dashboard
+- ✅ Portfolio tracking visualization
+- ✅ Investment calculator
+- ✅ Database & backend architecture
+- ✅ Angel One API connection
+- ✅ Groq API integration for AI advice
+- ✅ Real-time AI chat implementation
+- ✅ Transaction history display
+- ✅ Performance optimization
+- ✅ Testing & documentation
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/codecartels/tradewise.git
+
+# Install dependencies
+cd tradewise
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Add your API keys to .env file
+
+# Start the development server
+npm run dev
+```
+
+---
+
+## 👥 The Team Code Cartels
+
+<p align="center">
+  <img src="https://github.com/P47Parzival/Au/blob/main/assets/WhatsApp%20Image%202025-03-23%20at%2010.42.59_259ce921.jpg?raw=true" alt="TradewiseAI Dashboard" width="700px" />
+</p>
+
+---
+
+<div align="center">
+  <sub>© 2025 Code Cartels. All rights reserved.</sub>
+  <br />
+  <sub>Made with 💻 and ☕ for the FinTech Hackathon</sub>
+</div>

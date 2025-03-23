@@ -12,5 +12,9 @@ smartapi-python
 pyotp
 logzero
 pycryptodome
+<<<<<<< HEAD
 google-cloud-aiplatform
 google-generativeai
+=======
+paypalrestsdk==1.13.1 
+>>>>>>> 0ad71ac38ac4756de4629f059fd933e2dab09280
